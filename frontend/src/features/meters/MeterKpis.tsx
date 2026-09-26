@@ -10,15 +10,15 @@ export function MeterKpis({ meter }: { meter: MeterDetail }) {
 
   return (
     <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
-      <KpiCard label="Consumo actual" value={formatNumber(meter.currentDailyKwh)} unit="kWh" hint={`Últimas 24 h (${formatPlantDay(meter.lastReadingAt)})`} />
+      <KpiCard label="Consumo del último día" value={formatNumber(meter.currentDailyKwh)} unit="kWh" hint={`Último día con datos (${formatPlantDay(meter.lastReadingAt)})`} />
       <KpiCard
-        label="Baseline"
+        label="Consumo esperado"
         value={meter.baselineDailyKwh === null ? '—' : formatNumber(meter.baselineDailyKwh)}
         unit={meter.baselineDailyKwh === null ? undefined : 'kWh/día'}
-        hint={meter.baselineDailyKwh === null ? 'Se calcula al ejecutar el análisis' : 'Perfil horario de referencia'}
+        hint={meter.baselineDailyKwh === null ? 'Se calcula al ejecutar el análisis' : 'Según el comportamiento normal del medidor'}
       />
       <KpiCard
-        label="Variación"
+        label="Variación diaria"
         value={<VariationValue value={meter.variationPercent} />}
         highlighted={meter.status === 'CRITICAL'}
         hint={difference === null ? '—' : `${difference >= 0 ? '+' : '−'}${formatKwh(Math.abs(difference))} frente a lo esperado`}

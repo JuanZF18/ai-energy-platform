@@ -48,10 +48,19 @@ function LastAnalysisChip() {
   const dashboard = useQuery({ queryKey: queryKeys.dashboard, queryFn: api.dashboard })
   const lastAnalysis = dashboard.data?.lastAnalysis
 
+  if (dashboard.isError) {
+    return (
+      <span className="hidden items-center gap-2 rounded-lg border border-line px-2.5 py-1.5 text-xs text-critical lg:flex">
+        <span className="size-2 rounded-full bg-critical" aria-hidden />
+        Sin conexión con la API
+      </span>
+    )
+  }
+
   return (
     <span className="hidden items-center gap-2 rounded-lg border border-line px-2.5 py-1.5 text-xs text-muted lg:flex">
       <span className={`size-2 rounded-full ${lastAnalysis ? statusDot[lastAnalysis.status] : 'bg-line'}`} aria-hidden />
-      {lastAnalysis ? `Último análisis ${formatLocalDateTime(lastAnalysis.finishedAt ?? lastAnalysis.requestedAt)}` : 'Sin análisis todavía'}
+      {dashboard.isPending ? 'Cargando…' : lastAnalysis ? `Último análisis ${formatLocalDateTime(lastAnalysis.finishedAt ?? lastAnalysis.requestedAt)}` : 'Sin análisis todavía'}
     </span>
   )
 }

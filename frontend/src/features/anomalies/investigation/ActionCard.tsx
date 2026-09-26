@@ -7,7 +7,8 @@ import { allowedTransitions, anomalyStatusLabel, transitionActionLabel } from '@
 import { queryKeys } from '@/lib/queryKeys'
 import type { AnomalyDetail, AnomalyStatus } from '@/lib/types'
 
-const statusOrder: AnomalyStatus[] = ['OPEN', 'INVESTIGATING', 'RESOLVED', 'DISMISSED']
+const statusFlow = (current: AnomalyStatus): AnomalyStatus[] =>
+  current === 'DISMISSED' ? ['OPEN', 'DISMISSED'] : ['OPEN', 'INVESTIGATING', 'RESOLVED']
 
 export function ActionCard({ detail }: { detail: AnomalyDetail }) {
   const { summary } = detail
@@ -27,19 +28,25 @@ export function ActionCard({ detail }: { detail: AnomalyDetail }) {
 
   return (
     <Card className="border-accent">
-      <CardHeader title="Acción recomendada" />
+      <CardHeader title="Qué hacer" />
       <p className="text-[15px] font-semibold">{summary.recommendedAction}</p>
-      <ol className="flex flex-wrap gap-1 text-[11.5px]" aria-label="Estado de la anomalía">
-        {statusOrder.map((status) => (
-          <li
-            key={status}
-            aria-current={status === summary.status ? 'step' : undefined}
-            className={`rounded-md border px-2 py-1 ${status === summary.status ? 'border-accent bg-accent font-semibold text-white' : 'border-line text-muted'}`}
-          >
-            {anomalyStatusLabel[status]}
-          </li>
-        ))}
-      </ol>
+      <div className="grid gap-1.5">
+        <span className="text-xs font-semibold text-muted">Estado del caso</span>
+        <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[12px]" aria-label="Estado del caso">
+          {statusFlow(summary.status).map((status, index) => {
+            const isCurrent = status === summary.status
+            return (
+              <li key={status} aria-current={isCurrent ? 'step' : undefined} className="flex items-center gap-1.5">
+                {index > 0 && <span className="text-faint" aria-hidden>→</span>}
+                <span className={`flex items-center gap-1.5 ${isCurrent ? 'font-semibold text-ink' : 'text-faint'}`}>
+                  <span className={`size-2 rounded-full ${isCurrent ? 'bg-accent' : 'bg-line'}`} aria-hidden />
+                  {anomalyStatusLabel[status]}
+                </span>
+              </li>
+            )
+          })}
+        </ol>
+      </div>
       <label className="grid gap-1 text-xs font-semibold text-muted">
         Nota para el equipo (opcional)
         <textarea

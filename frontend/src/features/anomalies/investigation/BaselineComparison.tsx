@@ -29,8 +29,8 @@ export function BaselineComparison({ detail }: { detail: AnomalyDetail }) {
   return (
     <Card>
       <CardHeader
-        title="Comparación contra el baseline"
-        aside={`Baseline ${formatKwh(evidence.consumption.baselineDailyKwh)}/día · observado ${formatKwh(evidence.consumption.observedDailyKwh)} · ${formatSignedPercent(evidence.consumption.variationPercent)}`}
+        title="Consumo real frente al esperado"
+        aside={`Esperado ${formatKwh(evidence.consumption.baselineDailyKwh)}/día · ${evidence.window.isOngoing ? 'último día' : 'día del cambio'} ${formatKwh(evidence.consumption.observedDailyKwh)} · variación diaria ${formatSignedPercent(evidence.consumption.variationPercent)}`}
       />
       {readings.isPending && <Skeleton className="h-[220px]" />}
       {readings.isError && <ErrorMessage error={readings.error} onRetry={() => readings.refetch()} />}

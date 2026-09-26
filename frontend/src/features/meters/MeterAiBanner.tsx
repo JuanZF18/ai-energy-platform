@@ -15,7 +15,7 @@ export function MeterAiBanner({ anomaly }: { anomaly: AnomalyListItem }) {
       <p className="min-w-[260px] flex-1 text-[13.5px]">
         <AiTag />{' '}
         <b>
-          {anomalyTypeLabel[anomaly.type]} · {severityLabel[anomaly.severity]} · confianza {formatConfidence(anomaly.confidence)}.
+          {anomalyTypeLabel[anomaly.type]} · severidad {severityLabel[anomaly.severity].toLowerCase()} · {formatConfidence(anomaly.confidence)} de confianza.
         </b>{' '}
         {anomaly.reason}
       </p>

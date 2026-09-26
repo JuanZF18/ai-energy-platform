@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 import { AnomalyTypeChip, SeverityIndicator } from '@/components/ui/Badges'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { formatPlantDateTime } from '@/lib/format'
-import { anomalyStatusLabel } from '@/lib/labels'
+import { anomalyStatusLabel, eventTypeLabel } from '@/lib/labels'
 import type { AnomalyListItem, MeterEvent } from '@/lib/types'
 
 export function MeterEventsCard({ events }: { events: MeterEvent[] }) {
@@ -16,7 +16,7 @@ export function MeterEventsCard({ events }: { events: MeterEvent[] }) {
           {events.map((event) => (
             <li key={event.timestamp} className="grid grid-cols-[92px_auto_1fr] items-baseline gap-2 text-[13px]">
               <span className="font-mono text-[11.5px] text-muted">{formatPlantDateTime(event.timestamp)}</span>
-              <span className="rounded bg-dismissed-soft px-1.5 font-mono text-[11px] font-semibold text-dismissed">{event.type}</span>
+              <span className="rounded bg-dismissed-soft px-1.5 text-[11px] font-semibold text-dismissed">{eventTypeLabel(event.type)}</span>
               <span>{event.description}</span>
             </li>
           ))}

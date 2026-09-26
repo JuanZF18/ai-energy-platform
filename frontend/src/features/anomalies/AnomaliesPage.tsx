@@ -5,7 +5,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl'
 import { ErrorMessage, LoadingBlock, StateMessage } from '@/components/ui/States'
 import { RunAnalysisButton } from '@/features/analysis/RunAnalysisButton'
 import { api } from '@/lib/api'
-import { formatLocalDateTime } from '@/lib/format'
+import { countLabel, formatLocalDateTime } from '@/lib/format'
 import { anomalyStatusLabel } from '@/lib/labels'
 import { queryKeys } from '@/lib/queryKeys'
 import type { AnomalyStatus, AnomalyType } from '@/lib/types'
@@ -15,7 +15,7 @@ type TypeFilter = 'ALL' | AnomalyType
 
 const typeOptions: { value: TypeFilter; label: string }[] = [
   { value: 'ALL', label: 'Todas' },
-  { value: 'REAL_ANOMALY', label: 'Real' },
+  { value: 'REAL_ANOMALY', label: 'Anomalía real' },
   { value: 'DATA_QUALITY', label: 'Calidad de datos' },
   { value: 'EXPLAINABLE_ANOMALY', label: 'Explicable' },
   { value: 'FALSE_POSITIVE', label: 'Falso positivo' },
@@ -41,7 +41,7 @@ export default function AnomaliesPage() {
         title="Anomalías IA"
         description={
           all.length > 0 && summary
-            ? `Análisis del ${formatLocalDateTime(lastAnalysis?.finishedAt)} · ${summary.cases} casos · ${summary.highPriority} de alta prioridad · ${summary.dismissed} descartado`
+            ? `Análisis del ${formatLocalDateTime(lastAnalysis?.finishedAt)} · ${summary.cases} casos · ${summary.highPriority} para atender primero · ${countLabel(summary.dismissed, 'descartado', 'descartados')}`
             : 'Casos detectados por el último análisis, ordenados por prioridad'
         }
       />

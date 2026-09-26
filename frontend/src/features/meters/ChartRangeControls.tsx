@@ -20,8 +20,8 @@ export function ChartRangeControls({ granularity, range, onGranularityChange, on
         value={granularity}
         onChange={onGranularityChange}
         options={[
-          { value: 'hour', label: 'Hora' },
-          { value: 'day', label: 'Día' },
+          { value: 'hour', label: 'Por hora' },
+          { value: 'day', label: 'Por día' },
         ]}
       />
       <SegmentedControl<ChartRange>

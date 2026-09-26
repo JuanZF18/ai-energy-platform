@@ -5,7 +5,6 @@ import { MeterStatusPill } from '@/components/ui/Badges'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { ErrorMessage, LoadingBlock, StateMessage } from '@/components/ui/States'
-import { RunAnalysisButton } from '@/features/analysis/RunAnalysisButton'
 import { ApiError, api } from '@/lib/api'
 import { queryKeys } from '@/lib/queryKeys'
 import type { MeterDetail, ReadingGranularity } from '@/lib/types'
@@ -62,13 +61,12 @@ function MeterDetailView({ meter }: { meter: MeterDetail }) {
           </span>
         }
         description={`${meter.location} · lectura horaria · ${meter.readingsCount} lecturas`}
-        actions={<RunAnalysisButton />}
       />
       {mainAnomaly && mainAnomaly.anomaly && <MeterAiBanner anomaly={mainAnomaly} />}
       <MeterKpis meter={meter} />
       <Card>
         <CardHeader
-          title="Histórico de consumo frente al baseline"
+          title="Consumo real frente al esperado"
           action={<ChartRangeControls granularity={granularity} range={range} onGranularityChange={setGranularity} onRangeChange={setRange} />}
         />
         {readings.isError ? (
@@ -76,7 +74,11 @@ function MeterDetailView({ meter }: { meter: MeterDetail }) {
         ) : (
           <ConsumptionChart points={points} hoursPerTick={hoursPerTick} anomalyWindow={anomalyWindow} events={meter.events} />
         )}
-        <ChartLegend hasWindow={anomalyWindow !== undefined} />
+        <ChartLegend
+          hasWindow={anomalyWindow !== undefined}
+          hasSuspects={points.some((point) => point.suspectConsumption !== null)}
+          hasEvents={meter.events.length > 0}
+        />
       </Card>
       <Card>
         <CardHeader title="Variables eléctricas" aside={investigation.data ? 'Promedio antes → durante el cambio' : undefined} />
@@ -90,14 +92,14 @@ function MeterDetailView({ meter }: { meter: MeterDetail }) {
   )
 }
 
-function ChartLegend({ hasWindow }: { hasWindow: boolean }) {
+function ChartLegend({ hasWindow, hasSuspects, hasEvents }: { hasWindow: boolean; hasSuspects: boolean; hasEvents: boolean }) {
   return (
     <div className="flex flex-wrap gap-4 text-[11.5px] text-muted">
       <LegendItem className="bg-accent" label="Consumo medido (kWh)" />
-      <LegendItem className="bg-baseline" label="Esperado según el baseline" />
-      {hasWindow && <LegendItem className="border border-critical bg-critical-soft" label="Tramo anómalo" />}
-      <LegendItem className="bg-quality" label="Lectura sospechosa" />
-      <LegendItem className="bg-critical" label="Evento registrado" />
+      <LegendItem className="bg-baseline" label="Consumo esperado" />
+      {hasWindow && <LegendItem className="border border-critical bg-critical-soft" label="Periodo con anomalía" />}
+      {hasSuspects && <LegendItem className="bg-quality" label="Lectura sospechosa" />}
+      {hasEvents && <LegendItem className="bg-critical" label="Evento registrado" />}
     </div>
   )
 }

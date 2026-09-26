@@ -18,7 +18,7 @@ export function formatSignedPercent(value: number | null | undefined, decimals =
 }
 
 export function formatConfidence(value: number | null | undefined) {
-  return value === null || value === undefined ? '—' : formatNumber(value, 2)
+  return value === null || value === undefined ? '—' : `${formatNumber(value * 100)}%`
 }
 
 function dateParts(iso: string, timeZone?: string) {
@@ -60,4 +60,8 @@ export function formatLocalDateTime(iso: string | null | undefined) {
 
 export function formatSeconds(seconds: number | null | undefined) {
   return seconds === null || seconds === undefined ? '—' : `${formatNumber(seconds, 1)} s`
+}
+
+export function countLabel(count: number, singular: string, plural: string) {
+  return `${formatNumber(count)} ${count === 1 ? singular : plural}`
 }

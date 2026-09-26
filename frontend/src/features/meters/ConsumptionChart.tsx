@@ -1,5 +1,6 @@
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceArea, ReferenceLine, ResponsiveContainer, Scatter, Tooltip, XAxis, YAxis } from 'recharts'
 import { formatNumber, formatPlantDateTime } from '@/lib/format'
+import { eventTypeLabel } from '@/lib/labels'
 import type { EvidenceWindow, MeterEvent } from '@/lib/types'
 import type { ChartPoint } from './chartData'
 import { dayTicks, formatTick } from './chartData'
@@ -16,7 +17,7 @@ export function ConsumptionChart({ points, hoursPerTick, anomalyWindow, events, 
   if (points.length === 0) return <p className="text-[13px] text-muted">No hay lecturas en este rango.</p>
 
   return (
-    <div style={{ height }} role="img" aria-label="Consumo medido frente al consumo esperado según el baseline">
+    <div style={{ height }} role="img" aria-label="Consumo medido frente al consumo esperado">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart data={points} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}>
           <CartesianGrid stroke="var(--color-line-soft)" vertical={false} />
@@ -49,7 +50,7 @@ export function ConsumptionChart({ points, hoursPerTick, anomalyWindow, events, 
               stroke="var(--color-critical)"
               strokeDasharray="4 3"
               ifOverflow="hidden"
-              label={{ value: event.type, position: 'insideTopRight', fontSize: 10.5, fill: 'var(--color-critical)' }}
+              label={{ value: eventTypeLabel(event.type), position: 'insideTopRight', fontSize: 10.5, fill: 'var(--color-critical)' }}
             />
           ))}
         </ComposedChart>

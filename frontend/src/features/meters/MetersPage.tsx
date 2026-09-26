@@ -33,7 +33,7 @@ export default function MetersPage() {
 
   return (
     <>
-      <PageHeader title="Medidores" description="Consumo de las últimas 24 horas comparado con el baseline diario de cada medidor" />
+      <PageHeader title="Medidores" description="Consumo del último día de cada medidor comparado con su consumo esperado" />
       <MeterFilters params={params} counts={dashboard.data?.meters} searchText={searchText} onSearchTextChange={setSearchText} onChange={update} />
       {meters.isPending && <LoadingBlock rows={8} />}
       {meters.isError && <ErrorMessage error={meters.error} onRetry={() => meters.refetch()} />}

@@ -22,9 +22,9 @@ export function MeterTable({ meters }: { meters: MeterListItem[] }) {
         <thead>
           <tr className="border-b border-line text-left text-[11px] font-semibold text-muted">
             <th className="px-3 py-2.5">Medidor</th>
-            <th className="px-3 py-2.5 text-right">Consumo 24 h</th>
-            <th className="px-3 py-2.5 text-right">Baseline</th>
-            <th className="px-3 py-2.5 text-right">Variación</th>
+            <th className="px-3 py-2.5 text-right">Último día</th>
+            <th className="px-3 py-2.5 text-right">Esperado</th>
+            <th className="px-3 py-2.5 text-right">Variación diaria</th>
             <th className="px-3 py-2.5">Últimos 14 días</th>
             <th className="px-3 py-2.5">Estado</th>
             <th className="px-3 py-2.5">Anomalía</th>
@@ -47,7 +47,7 @@ export function MeterTable({ meters }: { meters: MeterListItem[] }) {
               </td>
               <td className="px-3 py-2.5 text-right font-mono tabular">{formatNumber(meter.currentDailyKwh)} kWh</td>
               <td className="px-3 py-2.5 text-right font-mono text-muted tabular">
-                {meter.baselineDailyKwh === null ? '—' : formatNumber(meter.baselineDailyKwh)}
+                {meter.baselineDailyKwh === null ? '—' : `${formatNumber(meter.baselineDailyKwh)} kWh`}
               </td>
               <td className="px-3 py-2.5 text-right">
                 <VariationValue value={meter.variationPercent} />

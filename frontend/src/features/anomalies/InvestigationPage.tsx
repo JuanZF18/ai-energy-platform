@@ -32,7 +32,7 @@ export default function InvestigationPage() {
       <PageHeader
         title={
           <span>
-            <span className="font-mono">{summary.meterId}</span> · {anomalyTypeLabel[summary.type]} · {severityLabel[summary.severity]}
+            <span className="font-mono">{summary.meterId}</span> · {anomalyTypeLabel[summary.type]} · severidad {severityLabel[summary.severity].toLowerCase()}
           </span>
         }
         description={`${summary.meterName} · ${detail.meterLocation} · detectada el ${formatLocalDateTime(summary.detectedAt)}`}
@@ -48,16 +48,18 @@ export default function InvestigationPage() {
       <div className="grid items-start gap-4 xl:grid-cols-[1fr_330px]">
         <div className="grid min-w-0 gap-3">
           <FindingCard detail={detail} />
-          <BaselineComparison detail={detail} />
-          <ChangedVariablesTable evidence={detail.evidence} />
-          <EvidenceCards evidence={detail.evidence} />
-          {detail.explanation && <ExplanationCard explanation={detail.explanation} />}
-          <AiResultJson summary={summary} />
         </div>
-        <div className="grid gap-3 xl:sticky xl:top-[72px]">
+        <aside className="grid gap-3 xl:sticky xl:top-[72px] xl:col-start-2 xl:row-span-2 xl:row-start-1">
           <DecisionCard detail={detail} />
           <ActionCard detail={detail} />
           <CaseTimeline detail={detail} />
+        </aside>
+        <div className="grid min-w-0 gap-3 xl:col-start-1 xl:row-start-2">
+          <BaselineComparison detail={detail} />
+          {detail.explanation && <ExplanationCard explanation={detail.explanation} />}
+          <EvidenceCards evidence={detail.evidence} />
+          <ChangedVariablesTable evidence={detail.evidence} />
+          <AiResultJson summary={summary} />
         </div>
       </div>
     </>
@@ -72,7 +74,7 @@ function AnomalyNotFound() {
       description="Puede que el enlace sea antiguo. Revisa la lista de anomalías del último análisis."
       action={
         <Link to="/anomalies" className="inline-flex h-9 items-center rounded-lg border border-line px-3.5 text-[13px] font-semibold hover:bg-surface-2">
-          Ir a Anomalías IA
+          Ir a Anomalías
         </Link>
       }
     />

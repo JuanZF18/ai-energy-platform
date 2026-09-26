@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { AiTag, StatusPill } from '@/components/ui/Badges'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
+import { countLabel } from '@/lib/format'
 import { queryKeys } from '@/lib/queryKeys'
 import type { AnalysisRun } from '@/lib/types'
 import { StageList } from './StageList'
@@ -63,8 +64,10 @@ export function AnalysisPanel({ run, startError, onRetry, onClose }: AnalysisPan
           <div className="grid gap-2 rounded-xl border border-line bg-surface-2 p-4">
             <p className="font-display text-xl font-bold">{run.headline}</p>
             <p className="text-[13px] text-muted">
-              {run.summary.realAnomalies} anomalía real · {run.summary.dataQualityIssues} de calidad de datos · {run.summary.explainableAnomalies} explicable ·{' '}
-              {run.summary.falsePositives} descartada como falso positivo
+              {countLabel(run.summary.realAnomalies, 'anomalía real', 'anomalías reales')} ·{' '}
+              {countLabel(run.summary.dataQualityIssues, 'problema de calidad de datos', 'problemas de calidad de datos')} ·{' '}
+              {countLabel(run.summary.explainableAnomalies, 'anomalía explicable', 'anomalías explicables')} ·{' '}
+              {countLabel(run.summary.falsePositives, 'falso positivo descartado', 'falsos positivos descartados')}
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               {first && <Button onClick={() => goTo(`/anomalies/${first.id}`)}>Ver {first.meterId} (prioridad 1) →</Button>}

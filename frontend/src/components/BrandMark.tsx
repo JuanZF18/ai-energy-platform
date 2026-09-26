@@ -13,7 +13,7 @@ export function Brand({ tone = 'light' }: { tone?: 'light' | 'dark' }) {
       <BrandMark />
       <span className="grid leading-tight">
         <span className={`font-display text-[17px] font-extrabold ${tone === 'light' ? 'text-white' : 'text-ink'}`}>Vatio</span>
-        <span className={`text-[10.5px] ${tone === 'light' ? 'text-nav-ink' : 'text-muted'}`}>Energy Intelligence</span>
+        <span className={`text-[10.5px] ${tone === 'light' ? 'text-nav-ink' : 'text-muted'}`}>Inteligencia energética</span>
       </span>
     </div>
   )

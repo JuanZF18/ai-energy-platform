@@ -4,9 +4,9 @@ export type Tone = 'critical' | 'alert' | 'ok' | 'quality' | 'explainable' | 'di
 
 export const meterStatusLabel: Record<MeterStatus, string> = {
   NOT_ANALYZED: 'Sin analizar',
-  OK: 'OK',
-  ALERT: 'Alert',
-  CRITICAL: 'Critical',
+  OK: 'Normal',
+  ALERT: 'Alerta',
+  CRITICAL: 'Crítico',
 }
 
 export const meterStatusTone: Record<MeterStatus, Tone> = {
@@ -17,10 +17,10 @@ export const meterStatusTone: Record<MeterStatus, Tone> = {
 }
 
 export const anomalyTypeLabel: Record<AnomalyType, string> = {
-  REAL_ANOMALY: 'Real anomaly',
-  DATA_QUALITY: 'Data quality',
-  EXPLAINABLE_ANOMALY: 'Explainable anomaly',
-  FALSE_POSITIVE: 'False positive',
+  REAL_ANOMALY: 'Anomalía real',
+  DATA_QUALITY: 'Calidad de datos',
+  EXPLAINABLE_ANOMALY: 'Anomalía explicable',
+  FALSE_POSITIVE: 'Falso positivo',
 }
 
 export const anomalyTypeTone: Record<AnomalyType, Tone> = {
@@ -38,10 +38,19 @@ export const shortActionLabel: Record<AnomalyType, string> = {
 }
 
 export const severityLabel: Record<Severity, string> = {
-  HIGH: 'High',
-  MEDIUM: 'Medium',
-  LOW: 'Low',
+  HIGH: 'Alta',
+  MEDIUM: 'Media',
+  LOW: 'Baja',
 }
+
+const eventTypeNames: Record<string, string> = {
+  OPERATIONAL_CHANGE: 'Cambio operativo',
+  SCHEDULED_OUTAGE: 'Parada programada',
+  DATA_QUALITY: 'Falla de datos',
+  UNKNOWN: 'Evento sin clasificar',
+}
+
+export const eventTypeLabel = (type: string) => eventTypeNames[type] ?? type
 
 export const severityLevel: Record<Severity, number> = {
   HIGH: 3,

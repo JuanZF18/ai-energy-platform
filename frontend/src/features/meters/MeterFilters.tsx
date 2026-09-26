@@ -30,8 +30,8 @@ export function MeterFilters({ params, counts, searchText, onSearchTextChange, o
         options={[
           { value: 'all', label: 'Todos', count: counts?.total },
           { value: 'normal', label: 'Normales', count: counts?.ok },
-          { value: 'alert', label: 'Alertas', count: counts?.alert },
-          { value: 'critical', label: 'Críticas', count: counts?.critical },
+          { value: 'alert', label: 'En alerta', count: counts?.alert },
+          { value: 'critical', label: 'Críticos', count: counts?.critical },
         ]}
       />
       <label className="flex min-w-[280px] items-center gap-2 rounded-lg border border-line bg-surface px-2.5">
@@ -40,7 +40,7 @@ export function MeterFilters({ params, counts, searchText, onSearchTextChange, o
           id="meter-search"
           value={searchText}
           onChange={(event) => onSearchTextChange(event.target.value)}
-          placeholder="Buscar por meter_id, p. ej. M-109"
+          placeholder="Buscar medidor, p. ej. M-109"
           aria-label="Buscar por meter_id"
           className="h-8 w-full bg-transparent text-[13px] outline-none placeholder:text-faint"
         />

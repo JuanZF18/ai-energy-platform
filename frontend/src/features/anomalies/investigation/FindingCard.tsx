@@ -1,7 +1,7 @@
 import { AiTag } from '@/components/ui/Badges'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { formatNumber, formatSignedPercent } from '@/lib/format'
-import { anomalyTypeLabel, severityLabel } from '@/lib/labels'
+import { anomalyTypeLabel, eventTypeLabel, severityLabel } from '@/lib/labels'
 import type { AnomalyDetail } from '@/lib/types'
 import { confirmsIssue } from './eventRelations'
 
@@ -28,15 +28,15 @@ export function FindingCard({ detail }: { detail: AnomalyDetail }) {
 }
 
 function eventsVerdict(explainingType: string | undefined, confirmingType: string | undefined, eventCount: number) {
-  if (explainingType) return `lo explica ${explainingType}`
-  if (confirmingType) return `lo confirma ${confirmingType}`
+  if (explainingType) return `lo explica: ${eventTypeLabel(explainingType).toLowerCase()}`
+  if (confirmingType) return `lo confirma: ${eventTypeLabel(confirmingType).toLowerCase()}`
   return eventCount > 0 ? 'ninguno lo explica' : 'no hay eventos'
 }
 
 function reasoningSteps({ summary, evidence }: AnomalyDetail) {
   const detection = evidence.dataQuality
     ? `${evidence.dataQuality.suspectReadings} lecturas sospechosas`
-    : `${formatSignedPercent(evidence.consumption.meanHourlyDeviationPercent)} durante ${evidence.window.hours} h`
+    : `${formatSignedPercent(evidence.consumption.meanHourlyDeviationPercent)} en promedio por hora, durante ${evidence.window.hours} h`
 
   const strongestChange = [...evidence.changedVariables]
     .filter((change) => change.variable !== 'Consumo')
@@ -50,10 +50,10 @@ function reasoningSteps({ summary, evidence }: AnomalyDetail) {
     {
       label: 'Correlación',
       value: strongestChange
-        ? `${strongestChange.variable} ${formatNumber(strongestChange.before, 2)} → ${formatNumber(strongestChange.after, 2)}`
+        ? `${strongestChange.variable} ${formatNumber(strongestChange.before, 2)} → ${formatNumber(strongestChange.after, 2)}${strongestChange.unit ? ` ${strongestChange.unit}` : ''}`
         : 'sin cambios eléctricos',
     },
     { label: 'Eventos', value: eventsVerdict(explainingEvent?.type, confirmingEvent?.type, evidence.events.length) },
-    { label: 'Clasificación', value: `${anomalyTypeLabel[summary.type]} · ${severityLabel[summary.severity]}` },
+    { label: 'Clasificación', value: `${anomalyTypeLabel[summary.type]} · severidad ${severityLabel[summary.severity].toLowerCase()}` },
   ]
 }

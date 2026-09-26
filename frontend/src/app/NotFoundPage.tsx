@@ -6,10 +6,10 @@ export function NotFoundPage() {
     <StateMessage
       eyebrow="No encontrado"
       title="Esta página no existe"
-      description="Revisa la dirección o vuelve al dashboard."
+      description="Revisa la dirección o vuelve al panel general."
       action={
         <Link to="/" className="inline-flex h-9 items-center rounded-lg border border-line px-3.5 text-[13px] font-semibold hover:bg-surface-2">
-          Ir al dashboard
+          Ir al panel general
         </Link>
       }
     />

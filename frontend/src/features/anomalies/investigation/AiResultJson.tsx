@@ -13,7 +13,7 @@ export function AiResultJson({ summary }: { summary: AnomalyListItem }) {
 
   return (
     <details className="rounded-xl border border-line bg-surface">
-      <summary className="cursor-pointer px-4 py-3 text-[13px] font-semibold">Ver el resultado de la IA en JSON</summary>
+      <summary className="cursor-pointer px-4 py-3 text-[13px] font-semibold">Detalle técnico: resultado de la IA en formato JSON</summary>
       <pre className="overflow-x-auto border-t border-line bg-surface-2 px-4 py-3 font-mono text-xs leading-relaxed">{JSON.stringify(result, null, 2)}</pre>
     </details>
   )

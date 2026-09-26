@@ -15,7 +15,7 @@ interface NavigationItem {
 }
 
 export const navigationItems: NavigationItem[] = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/', label: 'Panel general', icon: LayoutDashboard, end: true },
   { to: '/meters', label: 'Medidores', icon: Gauge },
   { to: '/anomalies', label: 'Anomalías IA', icon: TriangleAlert },
 ]
@@ -43,7 +43,9 @@ export function Sidebar() {
             <Icon className="size-[18px] opacity-85" aria-hidden />
             {label}
             {to === '/anomalies' && activeAnomalies > 0 && (
-              <span className="ml-auto rounded-full bg-critical px-1.5 font-mono text-[10.5px] font-bold text-white">{activeAnomalies}</span>
+              <span className="ml-auto rounded-full bg-critical px-1.5 font-mono text-[10.5px] font-bold text-white" title={`${activeAnomalies} anomalías por atender`} aria-label={`${activeAnomalies} anomalías por atender`}>
+                {activeAnomalies}
+              </span>
             )}
           </NavLink>
         ))}

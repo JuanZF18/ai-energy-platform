@@ -1,5 +1,6 @@
 import { Check, X } from 'lucide-react'
 import { Card, CardHeader } from '@/components/ui/Card'
+import { eventTypeLabel } from '@/lib/labels'
 import { formatPlantDateTime } from '@/lib/format'
 import type { Evidence } from '@/lib/types'
 import { confirmsIssue } from './eventRelations'
@@ -30,10 +31,10 @@ export function EvidenceCards({ evidence }: { evidence: Evidence }) {
             {evidence.events.map((event) => (
               <li key={event.timestamp} className="grid gap-1 text-[13px]">
                 <span className="flex items-center gap-2">
-                  <span className="rounded bg-dismissed-soft px-1.5 font-mono text-[11px] font-semibold text-dismissed">{event.type}</span>
+                  <span className="rounded bg-dismissed-soft px-1.5 text-[11px] font-semibold text-dismissed">{eventTypeLabel(event.type)}</span>
                   <span className="font-mono text-[11px] text-muted">{formatPlantDateTime(event.timestamp)}</span>
                 </span>
-                <span>"{event.description}"</span>
+                <span className="text-muted">Registro original: <i>"{event.description}"</i></span>
                 <EventVerdict explainsChange={event.explainsChange} confirmsIssue={confirmsIssue(evidence, event.type)} />
               </li>
             ))}
