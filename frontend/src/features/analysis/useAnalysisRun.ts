@@ -19,6 +19,7 @@ export function useAnalysisRun(runId: string | null) {
     queryFn: () => api.analysis(runId!),
     enabled: runId !== null,
     refetchInterval: (current) => (isFinished(current.state.data) ? false : pollingIntervalMs),
+    refetchIntervalInBackground: true,
   })
 
   const status = query.data?.status

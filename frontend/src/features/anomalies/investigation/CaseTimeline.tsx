@@ -13,7 +13,7 @@ export function CaseTimeline({ detail }: { detail: AnomalyDetail }) {
   const { evidence, summary, history } = detail
   const entries: TimelineEntry[] = [
     { time: formatPlantDateTime(evidence.window.start), text: summary.type === 'DATA_QUALITY' ? 'Primera lectura inconsistente' : 'Empieza el cambio de consumo' },
-    ...evidence.events.map((event) => ({ time: formatPlantDateTime(event.timestamp), text: `${eventTypeLabel(event.type)} registrado` })),
+    ...evidence.events.map((event) => ({ time: formatPlantDateTime(event.timestamp), text: `Registro de evento: ${eventTypeLabel(event.type)}` })),
     { time: formatLocalDateTime(summary.detectedAt), text: 'Detectada por el análisis' },
     ...history.map((change) => ({
       time: formatLocalDateTime(change.changedAt),
