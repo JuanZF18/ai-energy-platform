@@ -1,3 +1,4 @@
+using Anthropic;
 using EnergyPlatform.Application.Analysis;
 using EnergyPlatform.Application.Anomalies;
 using EnergyPlatform.Application.Dashboard;
@@ -5,12 +6,14 @@ using EnergyPlatform.Application.Explanations;
 using EnergyPlatform.Application.Meters;
 using EnergyPlatform.Domain.Analysis;
 using EnergyPlatform.Infrastructure.Analysis;
+using EnergyPlatform.Infrastructure.Explanations;
 using EnergyPlatform.Infrastructure.Persistence;
 using EnergyPlatform.Infrastructure.Seeding;
 using EnergyPlatform.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace EnergyPlatform.Infrastructure;
 
@@ -47,10 +50,29 @@ public static class InfrastructureServices
         services.AddScoped<IAnalysisRunner, AnalysisRunner>();
         services.AddScoped<AnalysisInputLoader>();
         services.AddScoped<AnalysisResultWriter>();
-        services.AddScoped<IExplanationWriter, TemplateExplanationWriter>();
+        AddExplanationWriter(services, configuration);
 
         services.AddScoped<ChallengeDataSeeder>();
         services.AddScoped<DatabaseInitializer>();
         return services;
+    }
+
+    private static void AddExplanationWriter(IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<TemplateExplanationWriter>();
+        var anthropic = configuration.GetSection(AnthropicOptions.SectionName).Get<AnthropicOptions>() ?? new AnthropicOptions();
+        if (!anthropic.IsConfigured)
+        {
+            services.AddScoped<IExplanationWriter>(provider => provider.GetRequiredService<TemplateExplanationWriter>());
+            return;
+        }
+
+        services.AddOptions<AnthropicOptions>().BindConfiguration(AnthropicOptions.SectionName);
+        services.AddSingleton(provider =>
+        {
+            var options = provider.GetRequiredService<IOptions<AnthropicOptions>>().Value;
+            return new AnthropicClient { ApiKey = options.ApiKey, Timeout = options.Timeout, MaxRetries = 1 };
+        });
+        services.AddScoped<IExplanationWriter, ClaudeExplanationWriter>();
     }
 }

@@ -58,11 +58,13 @@ public static class ShiftFindingComposer
         return type switch
         {
             AnomalyType.FalsePositive =>
-                $"Caída de {Percent(consumption.MeanHourlyDeviationPercent)} durante {shift.Hours} h el {Day(shift.Start)}, explicada por el evento \"{explainingEvent?.Description}\".",
+                $"Caída de {Percent(consumption.MeanHourlyDeviationPercent)} durante {shift.Hours} h el {Day(shift.Start)}, explicada por {EventName(explainingEvent)} (\"{explainingEvent?.Description}\").",
             AnomalyType.ExplainableAnomaly =>
-                $"Consumo {Percent(variation)} {side} del baseline desde el {Moment(shift.Start)}, coincide con el evento \"{explainingEvent?.Description}\".",
+                $"Consumo {Percent(variation)} {side} de lo esperado desde el {Moment(shift.Start)}, coincide con {EventName(explainingEvent)} (\"{explainingEvent?.Description}\").",
             _ =>
-                $"Consumo {Percent(variation)} {side} del baseline desde el {Moment(shift.Start)}, sin un evento operativo que lo explique."
+                $"Consumo {Percent(variation)} {side} de lo esperado desde el {Moment(shift.Start)}, sin un evento operativo que lo explique."
         };
     }
+
+    private static string EventName(MeterEvent? meterEvent) => meterEvent?.Type.WithIndefiniteArticle() ?? "un evento registrado";
 }

@@ -74,5 +74,5 @@ public sealed class ChallengeDataReader(string dataDirectory)
         DateTime.TryParseExact(value.Trim(), TimestampFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out timestamp);
 
     private static bool TryParseNumber(string value, out double number) =>
-        double.TryParse(value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out number);
+        double.TryParse(value.Trim(), NumberStyles.Float, CultureInfo.InvariantCulture, out number) && double.IsFinite(number);
 }

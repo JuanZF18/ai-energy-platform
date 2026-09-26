@@ -30,7 +30,7 @@ public sealed class Anomaly
     public IReadOnlyList<AnomalyStatusChange> StatusChanges => statusChanges;
 
     public bool IsActive => Status is AnomalyStatus.Open or AnomalyStatus.Investigating;
-    public bool NeedsExplanation => Explanation is null;
+    public bool NeedsExplanationFrom(ExplanationSource preferredSource) => Explanation is null || ExplanationSource != preferredSource;
 
     public static Anomaly Detect(Finding finding, string evidenceHash, Guid analysisRunId, DateTimeOffset detectedAt)
     {

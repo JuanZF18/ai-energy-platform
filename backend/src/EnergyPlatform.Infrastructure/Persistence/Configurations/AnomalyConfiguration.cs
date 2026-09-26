@@ -26,6 +26,5 @@ public sealed class AnomalyConfiguration : IEntityTypeConfiguration<Anomaly>
         builder.HasMany(anomaly => anomaly.StatusChanges).WithOne().HasForeignKey(change => change.AnomalyId);
         builder.Navigation(anomaly => anomaly.StatusChanges).UsePropertyAccessMode(PropertyAccessMode.Field);
         builder.Ignore(anomaly => anomaly.IsActive);
-        builder.Ignore(anomaly => anomaly.NeedsExplanation);
     }
 }

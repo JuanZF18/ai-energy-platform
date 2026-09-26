@@ -11,7 +11,7 @@ public static class SpanishText
         NegativeSign = "-"
     };
 
-    public static string SignedPercent(double percent) => percent.ToString("+#,##0.0;-#,##0.0;0,0", Numbers) + "%";
+    public static string SignedPercent(double percent) => percent.ToString("+#,##0.0;-#,##0.0;0.0", Numbers) + "%";
 
     public static string Percent(double percent) => Math.Abs(percent).ToString("#,##0.0", Numbers) + "%";
 
@@ -20,4 +20,6 @@ public static class SpanishText
     public static string Moment(DateTime timestamp) => timestamp.ToString("dd/MM HH:mm", CultureInfo.InvariantCulture);
 
     public static string Day(DateTime timestamp) => timestamp.ToString("dd/MM", CultureInfo.InvariantCulture);
+
+    public static string Capitalized(string text) => text.Length == 0 ? text : char.ToUpperInvariant(text[0]) + text[1..];
 }

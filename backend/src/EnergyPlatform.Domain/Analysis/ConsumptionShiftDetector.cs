@@ -8,22 +8,43 @@ public static class ConsumptionShiftDetector
     {
         var shifts = new List<ConsumptionShift>();
         var run = new List<DeviatingReading>();
+        var gap = new List<DeviatingReading>();
 
         foreach (var reading in readings)
         {
-            var deviation = profile.DeviationOf(reading);
-            var isOutsideExpected = Math.Abs(deviation) > options.DeviationThreshold;
-            var continuesRun = run.Count > 0 && isOutsideExpected && Math.Sign(deviation) == Math.Sign(run[0].Deviation);
+            var deviating = new DeviatingReading(reading, profile.DeviationOf(reading));
+            var isOutsideExpected = Math.Abs(deviating.Deviation) > options.DeviationThreshold;
 
-            if (!continuesRun)
+            if (run.Count == 0)
             {
-                AddShiftIfLongEnough(run, readings, options, shifts);
-                run.Clear();
+                if (isOutsideExpected)
+                {
+                    run.Add(deviating);
+                }
+
+                continue;
             }
 
+            if (isOutsideExpected && Math.Sign(deviating.Deviation) == Math.Sign(run[0].Deviation))
+            {
+                run.AddRange(gap);
+                gap.Clear();
+                run.Add(deviating);
+                continue;
+            }
+
+            if (!isOutsideExpected && gap.Count < options.MaximumShiftGapHours)
+            {
+                gap.Add(deviating);
+                continue;
+            }
+
+            AddShiftIfLongEnough(run, readings, options, shifts);
+            run.Clear();
+            gap.Clear();
             if (isOutsideExpected)
             {
-                run.Add(new DeviatingReading(reading, deviation));
+                run.Add(deviating);
             }
         }
 

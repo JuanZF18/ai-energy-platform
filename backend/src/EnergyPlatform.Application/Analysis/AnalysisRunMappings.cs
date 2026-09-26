@@ -7,7 +7,7 @@ public static class AnalysisRunMappings
     private static readonly Dictionary<AnalysisStage, string> Labels = new()
     {
         [AnalysisStage.Readings] = "Lecturas",
-        [AnalysisStage.Baseline] = "Baseline",
+        [AnalysisStage.Baseline] = "Consumo esperado",
         [AnalysisStage.Detection] = "Detección",
         [AnalysisStage.Correlation] = "Correlación",
         [AnalysisStage.Events] = "Eventos",

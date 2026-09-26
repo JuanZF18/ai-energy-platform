@@ -4,6 +4,8 @@ namespace EnergyPlatform.Application.Explanations;
 
 public interface IExplanationWriter
 {
+    ExplanationSource PreferredSource { get; }
+
     Task<WrittenExplanation> WriteAsync(Finding finding, CancellationToken cancellationToken);
 }
 

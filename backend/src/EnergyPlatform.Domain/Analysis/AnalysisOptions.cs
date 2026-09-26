@@ -6,6 +6,7 @@ public sealed record AnalysisOptions
 
     public double DeviationThreshold { get; init; } = 0.25;
     public int MinimumShiftHours { get; init; } = 3;
+    public int MaximumShiftGapHours { get; init; } = 3;
     public double RobustZThreshold { get; init; } = 5;
     public double NominalVoltage { get; init; } = 220;
     public double VoltageTolerance { get; init; } = 0.05;

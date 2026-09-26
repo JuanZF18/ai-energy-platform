@@ -23,7 +23,7 @@ public sealed class AnalysisResultWriter(EnergyDbContext db, IExplanationWriter 
         foreach (var finding in findings)
         {
             var anomaly = Upsert(finding, existing.GetValueOrDefault(finding.Fingerprint), analysisRunId);
-            if (anomaly.NeedsExplanation)
+            if (anomaly.NeedsExplanationFrom(explanationWriter.PreferredSource))
             {
                 var written = await explanationWriter.WriteAsync(finding, cancellationToken);
                 anomaly.AttachExplanation(written.Explanation, written.Source);
