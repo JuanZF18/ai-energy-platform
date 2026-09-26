@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+
+  --color-canvas: #eef2f4;
+  --color-surface: #ffffff;
+  --color-surface-2: #f6f8f9;
+  --color-ink: #13202a;
+  --color-muted: #5a6a75;
+  --color-faint: #8a98a2;
+  --color-line: #d9e0e5;
+  --color-line-soft: #e8edf0;
+
+  --color-nav: #0f2631;
+  --color-nav-ink: #c9d6dd;
+  --color-nav-active: #1c3a48;
+
+  --color-accent: #1a6c8c;
+  --color-accent-strong: #145770;
+  --color-accent-soft: #e2eff5;
+
+  --color-critical: #c2362b;
+  --color-critical-soft: #fbe9e7;
+  --color-alert: #b07406;
+  --color-alert-soft: #fcf1dc;
+  --color-ok: #22805a;
+  --color-ok-soft: #e3f3eb;
+  --color-quality: #6a4dc0;
+  --color-quality-soft: #eeeafb;
+  --color-explainable: #2d6db5;
+  --color-explainable-soft: #e4edf9;
+  --color-dismissed: #72808a;
+  --color-dismissed-soft: #edf0f2;
+  --color-baseline: #8fa0ab;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-[14px] text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
