@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/EnergyPlatform.Api/EnergyPlatform.Api.csproj" />
+    <Project Path="src/EnergyPlatform.Application/EnergyPlatform.Application.csproj" />
+    <Project Path="src/EnergyPlatform.Domain/EnergyPlatform.Domain.csproj" />
+    <Project Path="src/EnergyPlatform.Infrastructure/EnergyPlatform.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/EnergyPlatform.Domain.Tests/EnergyPlatform.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,13 @@
+meter_id,name,location
+M-101,Oficinas administrativas,Sede Norte
+M-102,Bodega de materias primas,Planta Norte
+M-103,Laboratorio de calidad,Planta Norte
+M-104,Línea de producción 2,Planta Norte
+M-105,Compresores,Planta Sur
+M-106,Línea de envasado,Planta Sur
+M-107,Casino y servicios,Sede Norte
+M-108,Refrigeración industrial,Planta Sur
+M-109,Hornos de secado,Planta Sur
+M-110,Iluminación exterior,Planta Norte
+M-111,Taller de mantenimiento,Planta Sur
+M-112,Tratamiento de aguas,Planta Norte

@@ -1,0 +1,65 @@
+@baseUrl = http://localhost:5080
+
+### Estado del servicio
+GET {{baseUrl}}/health
+
+### KPIs del dashboard
+GET {{baseUrl}}/api/dashboard/summary
+
+### Medidores ordenados por severidad
+GET {{baseUrl}}/api/meters
+
+### Solo medidores críticos
+GET {{baseUrl}}/api/meters?status=critical
+
+### Buscar por meter_id y ordenar por variación
+GET {{baseUrl}}/api/meters?search=10&sortBy=variation&direction=descending
+
+### Filtro inválido (400)
+GET {{baseUrl}}/api/meters?status=roto
+
+### Detalle de M-109
+GET {{baseUrl}}/api/meters/M-109
+
+### Medidor que no existe (404)
+GET {{baseUrl}}/api/meters/M-999
+
+### Lecturas horarias de M-109 desde el cambio
+GET {{baseUrl}}/api/meters/M-109/readings?from=2026-09-12T00:00:00-05:00
+
+### Lecturas diarias de M-112
+GET {{baseUrl}}/api/meters/M-112/readings?granularity=day
+
+### Run AI Analysis
+# @name analysis
+POST {{baseUrl}}/api/ai/analyze
+
+### Estado del análisis
+GET {{baseUrl}}/api/ai/analysis/{{analysis.response.body.$.id}}
+
+### Anomalías priorizadas
+# @name anomalies
+GET {{baseUrl}}/api/anomalies
+
+### Solo anomalías reales
+GET {{baseUrl}}/api/anomalies?type=REAL_ANOMALY
+
+### Investigación de la anomalía principal
+GET {{baseUrl}}/api/anomalies/{{anomalies.response.body.$[0].id}}
+
+### Acción: iniciar la investigación
+PATCH {{baseUrl}}/api/anomalies/{{anomalies.response.body.$[0].id}}
+Content-Type: application/json
+
+{
+  "status": "INVESTIGATING",
+  "note": "Mantenimiento revisa la carga conectada en Planta Sur"
+}
+
+### Transición no permitida (409) si la anomalía ya está en investigación
+PATCH {{baseUrl}}/api/anomalies/{{anomalies.response.body.$[0].id}}
+Content-Type: application/json
+
+{
+  "status": "INVESTIGATING"
+}
