@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { Outlet } from 'react-router'
+import { Outlet, ScrollRestoration } from 'react-router'
 import { LoadingBlock } from '@/components/ui/States'
 import { MobileNav } from './MobileNav'
 import { Sidebar } from './Sidebar'
@@ -18,6 +18,7 @@ export function AppLayout() {
         </main>
       </div>
       <MobileNav />
+      <ScrollRestoration />
     </div>
   )
 }

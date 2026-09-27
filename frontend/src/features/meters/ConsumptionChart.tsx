@@ -42,7 +42,7 @@ export function ConsumptionChart({ points, hoursPerTick, anomalyWindow, events, 
           )}
           <Area type="monotone" dataKey="consumption" stroke="var(--color-accent)" strokeWidth={1.4} fill="var(--color-accent)" fillOpacity={0.12} isAnimationActive={false} />
           <Line type="monotone" dataKey="expected" stroke="var(--color-baseline)" strokeDasharray="4 3" strokeWidth={1.4} dot={false} isAnimationActive={false} />
-          <Scatter dataKey="suspectConsumption" fill="var(--color-quality)" isAnimationActive={false} />
+          <Scatter dataKey="suspectConsumption" fill="var(--color-quality)" isAnimationActive={false} tooltipType="none" />
           {events.map((event) => (
             <ReferenceLine
               key={event.timestamp}

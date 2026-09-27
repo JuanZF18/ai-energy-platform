@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { X } from 'lucide-react'
 import { useNavigate } from 'react-router'
@@ -38,6 +38,11 @@ export function AnalysisPanel({ run, startError, onRetry, onClose }: AnalysisPan
   }
 
   const first = topAnomaly.data?.[0]
+  const resultRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (isCompleted) resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, [isCompleted])
 
   return (
     <div className="fixed inset-0 z-50 grid items-start justify-items-center overflow-y-auto bg-nav/40 p-4 pt-[8vh]" onClick={onClose}>
@@ -61,7 +66,7 @@ export function AnalysisPanel({ run, startError, onRetry, onClose }: AnalysisPan
         {run ? <StageList stages={run.stages} /> : !startError && <p className="text-muted">Preparando el análisis…</p>}
 
         {isCompleted && run.summary && (
-          <div className="grid gap-2 rounded-xl border border-line bg-surface-2 p-4">
+          <div ref={resultRef} className="grid gap-2 rounded-xl border border-line bg-surface-2 p-4">
             <p className="font-display text-xl font-bold">{run.headline}</p>
             <p className="text-[13px] text-muted">
               {countLabel(run.summary.realAnomalies, 'anomalía real', 'anomalías reales')} ·{' '}
