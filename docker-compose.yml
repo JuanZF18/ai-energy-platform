@@ -5,6 +5,8 @@ services:
       POSTGRES_DB: vatio
       POSTGRES_USER: vatio
       POSTGRES_PASSWORD: vatio
+    ports:
+      - "5433:5432"
     volumes:
       - vatio-db:/var/lib/postgresql/data
     healthcheck:

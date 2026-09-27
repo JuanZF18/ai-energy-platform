@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  backend:
+    name: Backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Compilar y ejecutar los tests
+        run: dotnet test backend/EnergyPlatform.slnx --configuration Release
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+  docker:
+    name: Docker Compose
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir y levantar la plataforma
+        run: docker compose up --build --detach --wait --wait-timeout 180
+      - name: Comprobar la API y el front
+        run: |
+          curl --fail --silent --retry 20 --retry-delay 3 --retry-all-errors http://localhost:5080/health | grep '"databaseReachable":true'
+          curl --fail --silent http://localhost:8080/api/config | grep '"authMode":"DEMO"'
+          curl --fail --silent --output /dev/null http://localhost:8080/
+      - name: Registros si algo falla
+        if: failure()
+        run: docker compose logs
+      - name: Apagar
+        if: always()
+        run: docker compose down --volumes
