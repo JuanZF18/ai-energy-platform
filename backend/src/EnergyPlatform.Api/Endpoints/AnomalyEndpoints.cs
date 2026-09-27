@@ -9,7 +9,7 @@ public static class AnomalyEndpoints
 {
     private const string DefaultOperator = "operador-demo";
 
-    public static void MapAnomalyEndpoints(this WebApplication app)
+    public static void MapAnomalyEndpoints(this IEndpointRouteBuilder app)
     {
         var anomalies = app.MapGroup("/api/anomalies").WithTags("Anomalías IA");
 

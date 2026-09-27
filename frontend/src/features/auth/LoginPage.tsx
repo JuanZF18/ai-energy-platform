@@ -4,7 +4,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router'
 import { Brand } from '@/components/BrandMark'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from './AuthContext'
-import { demoAccount } from './demoAccount'
+import { AuthScreen, ServerUnavailable } from './RequireAuth'
 
 const highlights = [
   { verb: 'Detecta', text: 'picos, cambios persistentes y lecturas eléctricas inconsistentes' },
@@ -13,7 +13,7 @@ const highlights = [
 ]
 
 export function LoginPage() {
-  const { session, signIn } = useAuth()
+  const { status, session, demoAccount, signIn, retry } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [email, setEmail] = useState('')
@@ -22,6 +22,8 @@ export function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const destination = (location.state as { from?: string } | null)?.from ?? '/'
 
+  if (status === 'loading') return <AuthScreen>Preparando el inicio de sesión…</AuthScreen>
+  if (status === 'unavailable') return <ServerUnavailable onRetry={retry} />
   if (session) return <Navigate to={destination} replace />
 
   async function handleSubmit(event: FormEvent) {
@@ -39,6 +41,7 @@ export function LoginPage() {
   }
 
   function fillDemoAccount() {
+    if (!demoAccount) return
     setEmail(demoAccount.email)
     setPassword(demoAccount.password)
     setError(null)
@@ -102,14 +105,16 @@ export function LoginPage() {
           <Button type="submit" size="lg" disabled={isSubmitting}>
             {isSubmitting ? 'Entrando…' : 'Entrar'}
           </Button>
-          <div className="grid gap-2 rounded-lg border border-dashed border-accent bg-accent-soft px-3 py-2.5 text-[13px]">
-            <span>
-              <b>Cuenta de demo:</b> <span className="font-mono">{demoAccount.email}</span> · <span className="font-mono">{demoAccount.password}</span>
-            </span>
-            <Button variant="ghost" size="sm" className="justify-self-start" onClick={fillDemoAccount}>
-              Usar cuenta demo
-            </Button>
-          </div>
+          {demoAccount && (
+            <div className="grid gap-2 rounded-lg border border-dashed border-accent bg-accent-soft px-3 py-2.5 text-[13px]">
+              <span>
+                <b>Cuenta de demo:</b> <span className="font-mono">{demoAccount.email}</span> · <span className="font-mono">{demoAccount.password}</span>
+              </span>
+              <Button variant="ghost" size="sm" className="justify-self-start" onClick={fillDemoAccount}>
+                Usar cuenta demo
+              </Button>
+            </div>
+          )}
         </form>
       </main>
     </div>

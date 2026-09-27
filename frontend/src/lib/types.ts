@@ -207,3 +207,24 @@ export interface DashboardSummary {
   dailyConsumption: { day: string; consumptionKwh: number }[]
   events: MeterEvent[]
 }
+
+export type AuthMode = 'FIREBASE' | 'DEMO'
+
+export interface FirebaseWebConfig {
+  apiKey: string
+  authDomain: string
+  projectId: string
+  appId: string
+}
+
+export interface ClientConfig {
+  authMode: AuthMode
+  firebase: FirebaseWebConfig | null
+  demoAccount: { email: string; password: string }
+}
+
+export interface DemoLoginResponse {
+  token: string
+  name: string
+  email: string
+}

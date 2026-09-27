@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using EnergyPlatform.Api.Authentication;
 using EnergyPlatform.Api.Middleware;
 using EnergyPlatform.Api.Workers;
 
@@ -28,6 +29,7 @@ public static class ApiServices
         });
         services.AddExceptionHandler<ApiExceptionHandler>();
         services.AddHostedService<AnalysisWorker>();
+        services.AddApiAuthentication(configuration);
 
         var allowedOrigins = configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
         services.AddCors(options => options.AddPolicy(FrontendCorsPolicy, policy =>

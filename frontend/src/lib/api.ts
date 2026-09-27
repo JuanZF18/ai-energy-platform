@@ -4,7 +4,9 @@ import type {
   AnomalyListItem,
   AnomalyStatus,
   AnomalyType,
+  ClientConfig,
   DashboardSummary,
+  DemoLoginResponse,
   MeterDetail,
   MeterListItem,
   MeterSortField,
@@ -23,11 +25,27 @@ export class ApiError extends Error {
   }
 }
 
+const apiBaseUrl = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
+
+let tokenProvider: () => Promise<string | null> = async () => null
+let handleUnauthorized: () => void = () => {}
+
+export function configureApiAuth(provider: () => Promise<string | null>, onUnauthorized: () => void) {
+  tokenProvider = provider
+  handleUnauthorized = onUnauthorized
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(path, {
+  const token = await tokenProvider()
+  const response = await fetch(`${apiBaseUrl}${path}`, {
     ...init,
-    headers: { 'Content-Type': 'application/json', ...init?.headers },
+    headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...init?.headers },
   })
+
+  if (response.status === 401) {
+    handleUnauthorized()
+    throw new ApiError(401, 'Tu sesión terminó. Vuelve a iniciar sesión.')
+  }
 
   if (!response.ok) {
     const problem = await response.json().catch(() => null)
@@ -66,6 +84,9 @@ export interface AnomalyListParams {
 }
 
 export const api = {
+  config: () => request<ClientConfig>('/api/config'),
+  demoLogin: (email: string, password: string) =>
+    request<DemoLoginResponse>('/api/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   dashboard: () => request<DashboardSummary>('/api/dashboard/summary'),
   meters: (params: MeterListParams = {}) => request<MeterListItem[]>(withQuery('/api/meters', { ...params })),
   meter: (meterId: string) => request<MeterDetail>(`/api/meters/${encodeURIComponent(meterId)}`),

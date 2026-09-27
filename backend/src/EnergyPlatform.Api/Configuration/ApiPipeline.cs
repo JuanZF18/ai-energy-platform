@@ -11,6 +11,8 @@ public static class ApiPipeline
         app.UseExceptionHandler();
         app.UseStatusCodePages();
         app.UseCors(ApiServices.FrontendCorsPolicy);
+        app.UseAuthentication();
+        app.UseAuthorization();
         return app;
     }
 
@@ -20,10 +22,13 @@ public static class ApiPipeline
         app.MapScalarApiReference("/docs", options => options.WithTitle("Vatio · AI Energy Management API"));
 
         app.MapHealthEndpoints();
-        app.MapDashboardEndpoints();
-        app.MapMeterEndpoints();
-        app.MapAnomalyEndpoints();
-        app.MapAnalysisEndpoints();
+        app.MapAuthEndpoints();
+
+        var secured = app.MapGroup(string.Empty).RequireAuthorization();
+        secured.MapDashboardEndpoints();
+        secured.MapMeterEndpoints();
+        secured.MapAnomalyEndpoints();
+        secured.MapAnalysisEndpoints();
         return app;
     }
 

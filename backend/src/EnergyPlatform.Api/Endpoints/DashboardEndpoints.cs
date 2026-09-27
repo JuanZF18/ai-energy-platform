@@ -4,7 +4,7 @@ namespace EnergyPlatform.Api.Endpoints;
 
 public static class DashboardEndpoints
 {
-    public static void MapDashboardEndpoints(this WebApplication app)
+    public static void MapDashboardEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("/api/dashboard/summary", async (IDashboardService dashboard, CancellationToken cancellationToken) =>
                 TypedResults.Ok(await dashboard.GetSummaryAsync(cancellationToken)))

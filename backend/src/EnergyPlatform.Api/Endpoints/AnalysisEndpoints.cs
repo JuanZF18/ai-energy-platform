@@ -5,7 +5,7 @@ namespace EnergyPlatform.Api.Endpoints;
 
 public static class AnalysisEndpoints
 {
-    public static void MapAnalysisEndpoints(this WebApplication app)
+    public static void MapAnalysisEndpoints(this IEndpointRouteBuilder app)
     {
         var analysis = app.MapGroup("/api/ai").WithTags("Análisis IA");
 

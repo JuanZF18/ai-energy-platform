@@ -5,7 +5,7 @@ namespace EnergyPlatform.Api.Endpoints;
 
 public static class MeterEndpoints
 {
-    public static void MapMeterEndpoints(this WebApplication app)
+    public static void MapMeterEndpoints(this IEndpointRouteBuilder app)
     {
         var meters = app.MapGroup("/api/meters").WithTags("Medidores");
 

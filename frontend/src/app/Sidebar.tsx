@@ -51,7 +51,7 @@ export function Sidebar() {
         ))}
       </nav>
       <div className="mt-auto flex items-center gap-2.5 border-t border-white/10 px-2 pt-3 text-xs">
-        <span className="grid size-7 place-items-center rounded-full bg-[#2b5566] text-[11px] font-bold text-white">OD</span>
+        <span className="grid size-7 place-items-center rounded-full bg-[#2b5566] text-[11px] font-bold text-white uppercase">{initials(session?.name)}</span>
         <div className="grid">
           <span className="text-white">{session?.name}</span>
           <button type="button" onClick={signOut} className="flex items-center gap-1 text-left opacity-75 hover:opacity-100">
@@ -62,4 +62,9 @@ export function Sidebar() {
       </div>
     </aside>
   )
+}
+
+function initials(name: string | undefined) {
+  const words = (name ?? '').split(/[\s@._-]+/).filter(Boolean)
+  return words.slice(0, 2).map((word) => word[0]).join('') || '·'
 }
