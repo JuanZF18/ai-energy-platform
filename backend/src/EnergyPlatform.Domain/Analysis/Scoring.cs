@@ -14,6 +14,11 @@ public static class Scoring
         Limit(issue.SpanHours / 24.0),
         classification.Corroboration);
 
+    public static ConfidenceBreakdown ConfidenceForVoltage(VoltageIssue issue, Classification classification, AnalysisOptions options) => new(
+        Limit(issue.LargestExcessPercent(options) / (options.MaximumVoltageRise * 100)),
+        Limit(issue.SpanHours / 24.0),
+        classification.Corroboration);
+
     public static double Priority(AnomalyType type, Severity severity, double confidence) =>
         Math.Round(SeverityWeight(severity) * TypeWeight(type) * confidence, 3);
 

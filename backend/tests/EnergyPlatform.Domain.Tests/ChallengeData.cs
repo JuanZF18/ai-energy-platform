@@ -1,4 +1,7 @@
 using EnergyPlatform.Domain.Analysis;
+using EnergyPlatform.Domain.Anomalies;
+using EnergyPlatform.Domain.Events;
+using EnergyPlatform.Domain.Readings;
 using EnergyPlatform.Infrastructure.Seeding;
 
 namespace EnergyPlatform.Domain.Tests;
@@ -18,6 +21,20 @@ public static class ChallengeData
                 .GroupBy(reading => reading.MeterId)
                 .Select(meter => new MeterAnalysis(meter.Key, meter, events.Where(meterEvent => meterEvent.MeterId == meter.Key)))
         ];
+    }
+
+    public static IReadOnlyList<Finding> AnalyzeWith(
+        Func<IReadOnlyList<Reading>, IEnumerable<Reading>>? readings = null,
+        Func<IReadOnlyList<MeterEvent>, IEnumerable<MeterEvent>>? events = null)
+    {
+        var allReadings = (readings ?? (rows => rows))(Files.ReadReadings().Rows).ToList();
+        var allEvents = (events ?? (rows => rows))(Files.ReadEvents().Rows).ToList();
+        var meters = allReadings
+            .GroupBy(reading => reading.MeterId)
+            .Select(meter => new MeterAnalysis(meter.Key, meter, allEvents.Where(meterEvent => meterEvent.MeterId == meter.Key)))
+            .ToList();
+
+        return new AnomalyEngine(AnalysisOptions.Default).Analyze(meters);
     }
 
     private static string FindDataDirectory()

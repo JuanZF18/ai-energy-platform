@@ -117,17 +117,7 @@ public sealed class DataVariationTests
 
     private static IReadOnlyList<Finding> Analyze(
         Func<IReadOnlyList<Reading>, IEnumerable<Reading>>? readings = null,
-        Func<IReadOnlyList<MeterEvent>, IEnumerable<MeterEvent>>? events = null)
-    {
-        var allReadings = (readings ?? (rows => rows))(ChallengeData.Files.ReadReadings().Rows).ToList();
-        var allEvents = (events ?? (rows => rows))(ChallengeData.Files.ReadEvents().Rows).ToList();
-        var meters = allReadings
-            .GroupBy(reading => reading.MeterId)
-            .Select(meter => new MeterAnalysis(meter.Key, meter, allEvents.Where(meterEvent => meterEvent.MeterId == meter.Key)))
-            .ToList();
-
-        return new AnomalyEngine(AnalysisOptions.Default).Analyze(meters);
-    }
+        Func<IReadOnlyList<MeterEvent>, IEnumerable<MeterEvent>>? events = null) => ChallengeData.AnalyzeWith(readings, events);
 
     private static Reading Scaled(Reading reading, double factor) =>
         new(reading.MeterId, reading.Timestamp, reading.ConsumptionKwh * factor, reading.VoltageV, reading.CurrentA * factor, reading.PowerFactor);

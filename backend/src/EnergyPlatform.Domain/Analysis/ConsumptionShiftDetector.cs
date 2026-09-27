@@ -39,7 +39,7 @@ public static class ConsumptionShiftDetector
                 continue;
             }
 
-            AddShiftIfLongEnough(run, readings, options, shifts);
+            AddShiftIfSignificant(run, readings, options, shifts);
             run.Clear();
             gap.Clear();
             if (isOutsideExpected)
@@ -48,17 +48,19 @@ public static class ConsumptionShiftDetector
             }
         }
 
-        AddShiftIfLongEnough(run, readings, options, shifts);
+        AddShiftIfSignificant(run, readings, options, shifts);
         return shifts;
     }
 
-    private static void AddShiftIfLongEnough(
+    private static void AddShiftIfSignificant(
         List<DeviatingReading> run,
         IReadOnlyList<Reading> readings,
         AnalysisOptions options,
         List<ConsumptionShift> shifts)
     {
-        if (run.Count < options.MinimumShiftHours)
+        var isLongEnough = run.Count >= options.MinimumShiftHours;
+        var isSevereEnough = run.Any(item => Math.Abs(item.Deviation) >= options.HighSeverityDeviation);
+        if (!isLongEnough && !isSevereEnough)
         {
             return;
         }

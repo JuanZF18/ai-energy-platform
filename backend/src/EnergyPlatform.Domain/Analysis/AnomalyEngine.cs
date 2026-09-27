@@ -18,6 +18,7 @@ public sealed class AnomalyEngine(AnalysisOptions options)
         {
             meter.Shifts = ConsumptionShiftDetector.Detect(meter.Readings, ProfileOf(meter), options);
             meter.DataQualityIssue = DataQualityIssue.Find(meter.Readings, meter.Shifts, options);
+            meter.VoltageIssue = VoltageIssue.Find(meter.Readings, options);
         }
     }
 
@@ -45,7 +46,8 @@ public sealed class AnomalyEngine(AnalysisOptions options)
     [
         .. meters.SelectMany(meter => meter.Shifts
             .Select(shift => ShiftFindingComposer.Compose(meter, shift, options))
-            .Concat(meter.DataQualityIssue is { } issue ? [DataQualityFindingComposer.Compose(meter, issue, options)] : []))
+            .Concat(meter.DataQualityIssue is { } issue ? [DataQualityFindingComposer.Compose(meter, issue, options)] : [])
+            .Concat(meter.VoltageIssue is { } voltage ? [VoltageFindingComposer.Compose(meter, voltage, options)] : []))
     ];
 
     public IReadOnlyList<Finding> Prioritize(IEnumerable<Finding> findings) =>

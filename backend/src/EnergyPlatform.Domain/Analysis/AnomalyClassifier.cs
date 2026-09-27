@@ -43,6 +43,15 @@ public static class AnomalyClassifier
             issue.RepeatsEveryHours is not null
         ]);
 
+    public static Classification ClassifyVoltage(VoltageIssue issue, AnalysisOptions options) =>
+        new(AnomalyType.RealAnomaly, Severity.High,
+        [
+            true,
+            issue.Readings.Count > 1,
+            issue.IsOngoing,
+            issue.IsOvervoltage(options) != issue.IsUndervoltage(options)
+        ]);
+
     private static bool MatchesDeclaredDuration(ConsumptionShift shift, MeterEvent outage, AnalysisOptions options) =>
         outage.DeclaredDuration is { } duration
         && Math.Abs(shift.Hours - duration.TotalHours) <= options.EventTolerance.TotalHours;

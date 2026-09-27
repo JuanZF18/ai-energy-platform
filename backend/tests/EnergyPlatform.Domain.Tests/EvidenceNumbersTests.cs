@@ -23,7 +23,7 @@ public sealed class EvidenceNumbersTests
 
     [Theory]
     [InlineData("16 lecturas inconsistentes desde el 13/09 00:00")]
-    [InlineData("voltaje fuera del rango 209–231 V")]
+    [InlineData("voltaje fuera del rango 198–231 V")]
     [InlineData("el factor de potencia cae a 0,58")]
     [InlineData("confianza del 95%")]
     [InlineData("variación diaria de +0,5%")]

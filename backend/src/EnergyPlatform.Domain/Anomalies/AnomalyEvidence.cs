@@ -7,7 +7,8 @@ public sealed record AnomalyEvidence(
     IReadOnlyList<EventEvidence> Events,
     DataQualityEvidence? DataQuality,
     ConfidenceBreakdown Confidence,
-    IReadOnlyList<string> Facts);
+    IReadOnlyList<string> Facts,
+    VoltageEvidence? Voltage = null);
 
 public sealed record EvidenceWindow(DateTime Start, DateTime End, int Hours, bool IsOngoing);
 
@@ -27,6 +28,8 @@ public sealed record DataQualityEvidence(
     double MaximumVoltage,
     IReadOnlyList<double> RepeatedPowerFactors,
     int? RepeatsEveryHours);
+
+public sealed record VoltageEvidence(int ReadingsOutsideStandard, double LowestVoltage, double HighestVoltage, double MinimumAllowed, double MaximumAllowed);
 
 public sealed record ConfidenceBreakdown(double Signal, double Persistence, double Corroboration)
 {

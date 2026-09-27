@@ -13,6 +13,7 @@ public sealed class MeterAnalysis(string meterId, IEnumerable<Reading> readings,
     public HourlyProfile? DetectionProfile { get; internal set; }
     public IReadOnlyList<ConsumptionShift> Shifts { get; internal set; } = [];
     public DataQualityIssue? DataQualityIssue { get; internal set; }
+    public VoltageIssue? VoltageIssue { get; internal set; }
     public ConsumptionSnapshot? Snapshot { get; internal set; }
     public IReadOnlyDictionary<ConsumptionShift, ElectricalChange> ElectricalChanges { get; internal set; } =
         new Dictionary<ConsumptionShift, ElectricalChange>();

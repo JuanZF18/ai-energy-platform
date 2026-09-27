@@ -18,9 +18,15 @@ public static class DataQualityFacts
             $"{evidence.SuspectReadings} lecturas sospechosas desde el {Moment(issue.FirstSeen)} mientras el consumo se mantiene normal"
         };
 
-        if (issue.Has(SuspicionReason.VoltageOutOfRange))
+        var outsideStandard = issue.Readings.Where(suspect => suspect.Reasons.HasFlag(SuspicionReason.VoltageOutOfRange)).ToList();
+        if (outsideStandard.Count > 0)
         {
-            facts.Add($"Voltaje entre {Number(evidence.MinimumVoltage, 1)} y {Number(evidence.MaximumVoltage, 1)} V, fuera del rango {Number(options.MinimumVoltage)}–{Number(options.MaximumVoltage)} V");
+            facts.Add($"{outsideStandard.Count} de esas lecturas tienen el voltaje fuera del rango {Number(options.MinimumVoltage)}–{Number(options.MaximumVoltage)} V de la norma NTC 1340 (entre {Number(outsideStandard.Min(suspect => suspect.Reading.VoltageV), 1)} y {Number(outsideStandard.Max(suspect => suspect.Reading.VoltageV), 1)} V)");
+        }
+
+        if (issue.Has(SuspicionReason.InconsistentElectricalRatio))
+        {
+            facts.Add("En varias lecturas el consumo no cuadra con voltaje × corriente × factor de potencia: los valores no pueden ser reales al mismo tiempo");
         }
 
         if (evidence.RepeatedPowerFactors.Count > 0)

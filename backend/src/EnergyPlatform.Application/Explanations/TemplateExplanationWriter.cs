@@ -26,6 +26,8 @@ public sealed class TemplateExplanationWriter : IExplanationWriter
         var confidence = SpanishText.Number(finding.Confidence * 100);
         var impact = finding.Type switch
         {
+            AnomalyType.RealAnomaly when IsVoltageCase(finding) =>
+                "Un voltaje fuera de la norma de forma sostenida puede dañar motores, variadores y equipos electrónicos.",
             AnomalyType.RealAnomaly =>
                 "Un cambio sostenido sin causa conocida puede indicar una falla en la instalación o en los equipos, y afecta el costo de energía.",
             AnomalyType.DataQuality =>
@@ -37,6 +39,8 @@ public sealed class TemplateExplanationWriter : IExplanationWriter
 
         return $"{finding.Reason} {impact} La IA lo clasifica como {TypeName(finding.Type)} con {confidence}% de confianza.";
     }
+
+    private static bool IsVoltageCase(Finding finding) => finding.Evidence.Voltage is not null;
 
     private static string TypeName(AnomalyType type) => type switch
     {
@@ -54,6 +58,12 @@ public sealed class TemplateExplanationWriter : IExplanationWriter
 
     private static IReadOnlyList<string> PossibleCauses(Finding finding) => finding.Type switch
     {
+        AnomalyType.RealAnomaly when IsVoltageCase(finding) =>
+        [
+            "Un problema en la red del operador, por ejemplo en la regulación del transformador",
+            "Una conexión floja o un neutro deteriorado en la instalación",
+            "Cambios grandes de carga en otros usuarios de la misma red"
+        ],
         AnomalyType.RealAnomaly =>
         [
             "Una carga nueva o un equipo conectado sin reportar",
@@ -82,6 +92,12 @@ public sealed class TemplateExplanationWriter : IExplanationWriter
 
     private static IReadOnlyList<string> NextSteps(Finding finding) => finding.Type switch
     {
+        AnomalyType.RealAnomaly when IsVoltageCase(finding) =>
+        [
+            "Medir el voltaje en sitio con un analizador de red",
+            "Reportar el evento al operador de red si el problema viene de afuera",
+            "Revisar protecciones y reguladores de los equipos sensibles"
+        ],
         AnomalyType.RealAnomaly =>
         [
             "Enviar a mantenimiento a revisar la carga conectada y el estado del medidor",

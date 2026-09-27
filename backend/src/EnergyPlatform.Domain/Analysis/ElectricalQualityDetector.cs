@@ -4,11 +4,18 @@ namespace EnergyPlatform.Domain.Analysis;
 
 public static class ElectricalQualityDetector
 {
-    public static IReadOnlyList<SuspectReading> FindSuspectReadings(IReadOnlyList<Reading> readings, AnalysisOptions options)
+    public static IReadOnlyList<SuspectReading> FindSuspectReadings(IReadOnlyList<Reading> readings, AnalysisOptions options) =>
+        [.. Assess(readings, options).Where(suspect => suspect.Reasons != SuspicionReason.None && !IsCoherentVoltageDeviation(suspect))];
+
+    public static IReadOnlyList<Reading> FindVoltageOutsideStandard(IReadOnlyList<Reading> readings, AnalysisOptions options) =>
+        [.. Assess(readings, options).Where(IsCoherentVoltageDeviation).Select(suspect => suspect.Reading)];
+
+    private static bool IsCoherentVoltageDeviation(SuspectReading suspect) => suspect.Reasons == SuspicionReason.VoltageOutOfRange;
+
+    private static IEnumerable<SuspectReading> Assess(IReadOnlyList<Reading> readings, AnalysisOptions options)
     {
         var powerFactorScores = RobustStatistics.RobustZScores([.. readings.Select(reading => reading.PowerFactor)]);
         var ratioScores = RobustStatistics.RobustZScores([.. readings.Select(reading => reading.ElectricalRatio)]);
-        var suspects = new List<SuspectReading>();
 
         for (var index = 0; index < readings.Count; index++)
         {
@@ -30,12 +37,7 @@ public static class ElectricalQualityDetector
                 reasons |= SuspicionReason.InconsistentElectricalRatio;
             }
 
-            if (reasons != SuspicionReason.None)
-            {
-                suspects.Add(new SuspectReading(reading, reasons));
-            }
+            yield return new SuspectReading(reading, reasons);
         }
-
-        return suspects;
     }
 }
