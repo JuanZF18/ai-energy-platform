@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: vatio
+      POSTGRES_USER: vatio
+      POSTGRES_PASSWORD: vatio
+    volumes:
+      - vatio-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vatio -d vatio"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__EnergyDatabase: Host=db;Port=5432;Database=vatio;Username=vatio;Password=vatio
+      Auth__Mode: Demo
+      Anthropic__ApiKey: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "5080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  vatio-db:
