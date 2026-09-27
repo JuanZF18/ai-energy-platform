@@ -1,0 +1,15 @@
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/TestResults/
+frontend/
+backend/tests/
+.git/
+.github/
+.vs/
+.idea/
+**/*.user
+.env
+.env.*
+expected_results.csv
