@@ -31,8 +31,8 @@ export function EvidenceCards({ evidence }: { evidence: Evidence }) {
             {evidence.events.map((event) => (
               <li key={event.timestamp} className="grid gap-1 text-[13px]">
                 <span className="flex items-center gap-2">
-                  <span className="rounded bg-dismissed-soft px-1.5 text-[11px] font-semibold text-dismissed">{eventTypeLabel(event.type)}</span>
-                  <span className="font-mono text-[11px] text-muted">{formatPlantDateTime(event.timestamp)}</span>
+                  <span className="rounded bg-dismissed-soft px-1.5 text-xs font-semibold text-dismissed">{eventTypeLabel(event.type)}</span>
+                  <span className="font-mono text-xs text-muted">{formatPlantDateTime(event.timestamp)}</span>
                 </span>
                 <span className="text-muted">Registro original: <i>"{event.description}"</i></span>
                 <EventVerdict explainsChange={event.explainsChange} confirmsIssue={confirmsIssue(evidence, event.type)} />

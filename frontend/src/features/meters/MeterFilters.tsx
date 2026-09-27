@@ -34,18 +34,18 @@ export function MeterFilters({ params, counts, searchText, onSearchTextChange, o
           { value: 'critical', label: 'Críticos', count: counts?.critical },
         ]}
       />
-      <label className="flex min-w-[280px] items-center gap-2 rounded-lg border border-line bg-surface px-2.5">
-        <Search className="size-4 text-faint" aria-hidden />
+      <label className="flex w-full items-center gap-2 rounded-lg border border-line bg-surface px-3 focus-within:border-accent sm:w-auto sm:min-w-[280px]">
+        <Search className="size-5 shrink-0 text-muted sm:size-4" aria-hidden />
         <input
           id="meter-search"
           value={searchText}
           onChange={(event) => onSearchTextChange(event.target.value)}
           placeholder="Buscar medidor, p. ej. M-109"
           aria-label="Buscar por meter_id"
-          className="h-8 w-full bg-transparent text-[13px] outline-none placeholder:text-faint"
+          className="h-11 w-full bg-transparent text-base outline-none placeholder:text-muted sm:h-8 sm:text-[13px]"
         />
       </label>
-      <div className="ml-auto flex items-center gap-1.5">
+      <div className="flex w-full items-center gap-1.5 sm:ml-auto sm:w-auto">
         <label htmlFor="meter-sort" className="text-[13px] text-muted">
           Ordenar por
         </label>
@@ -53,7 +53,7 @@ export function MeterFilters({ params, counts, searchText, onSearchTextChange, o
           id="meter-sort"
           value={params.sortBy}
           onChange={(event) => onChange({ sortBy: event.target.value as MeterSortField })}
-          className="h-8 rounded-lg border border-line bg-surface px-2 text-[13px] font-semibold"
+          className="h-11 flex-1 rounded-lg border border-line bg-surface px-2 text-sm font-semibold sm:h-8 sm:flex-none sm:text-[13px]"
         >
           {sortOptions.map((option) => (
             <option key={option.value} value={option.value}>
@@ -64,7 +64,7 @@ export function MeterFilters({ params, counts, searchText, onSearchTextChange, o
         <button
           type="button"
           onClick={() => onChange({ direction: isDescending ? 'ascending' : 'descending' })}
-          className="grid size-8 place-items-center rounded-lg border border-line bg-surface hover:bg-surface-2"
+          className="grid size-11 place-items-center rounded-lg border border-line bg-surface hover:bg-surface-2 sm:size-8"
           aria-label={isDescending ? 'Orden descendente, cambiar a ascendente' : 'Orden ascendente, cambiar a descendente'}
         >
           {isDescending ? <ArrowDownWideNarrow className="size-4" /> : <ArrowUpNarrowWide className="size-4" />}

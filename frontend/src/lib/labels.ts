@@ -47,10 +47,19 @@ const eventTypeNames: Record<string, string> = {
   OPERATIONAL_CHANGE: 'Cambio operativo',
   SCHEDULED_OUTAGE: 'Parada programada',
   DATA_QUALITY: 'Falla de datos',
-  UNKNOWN: 'Evento sin clasificar',
+  UNKNOWN: 'Sin evento operativo',
 }
 
 export const eventTypeLabel = (type: string) => eventTypeNames[type] ?? type
+
+const eventTypeColors: Record<string, string> = {
+  SCHEDULED_OUTAGE: 'var(--color-dismissed)',
+  OPERATIONAL_CHANGE: 'var(--color-explainable)',
+  DATA_QUALITY: 'var(--color-quality)',
+  UNKNOWN: 'var(--color-muted)',
+}
+
+export const eventTypeColor = (type: string) => eventTypeColors[type] ?? 'var(--color-muted)'
 
 export const severityLevel: Record<Severity, number> = {
   HIGH: 3,
@@ -87,4 +96,18 @@ export const toneClasses: Record<Tone, { soft: string; text: string; solid: stri
   explainable: { soft: 'bg-explainable-soft', text: 'text-explainable', solid: 'bg-explainable', border: 'border-explainable' },
   dismissed: { soft: 'bg-dismissed-soft', text: 'text-dismissed', solid: 'bg-dismissed', border: 'border-dismissed' },
   accent: { soft: 'bg-accent-soft', text: 'text-accent', solid: 'bg-accent', border: 'border-accent' },
+}
+
+export const meterStatusColor: Record<MeterStatus, string> = {
+  CRITICAL: 'var(--color-critical)',
+  ALERT: 'var(--color-alert)',
+  OK: 'var(--color-muted)',
+  NOT_ANALYZED: 'var(--color-muted)',
+}
+
+export const anomalyStatusTone: Record<AnomalyStatus, Tone> = {
+  OPEN: 'alert',
+  INVESTIGATING: 'accent',
+  RESOLVED: 'ok',
+  DISMISSED: 'dismissed',
 }

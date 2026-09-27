@@ -21,7 +21,7 @@ public static class EvidenceParts
 
     public static IReadOnlyList<VariableChange> ChangedVariables(ElectricalChange change) =>
     [
-        Compare("Consumo", "kWh/h", change.Before.ConsumptionKwh, change.During.ConsumptionKwh),
+        Compare("Consumo", "kW", change.Before.ConsumptionKwh, change.During.ConsumptionKwh),
         Compare("Corriente", "A", change.Before.CurrentA, change.During.CurrentA),
         Compare("Factor de potencia", "", change.Before.PowerFactor, change.During.PowerFactor),
         Compare("Voltaje", "V", change.Before.VoltageV, change.During.VoltageV)

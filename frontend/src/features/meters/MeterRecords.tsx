@@ -15,8 +15,8 @@ export function MeterEventsCard({ events }: { events: MeterEvent[] }) {
         <ul className="grid gap-2">
           {events.map((event) => (
             <li key={event.timestamp} className="grid grid-cols-[92px_auto_1fr] items-baseline gap-2 text-[13px]">
-              <span className="font-mono text-[11.5px] text-muted">{formatPlantDateTime(event.timestamp)}</span>
-              <span className="rounded bg-dismissed-soft px-1.5 text-[11px] font-semibold text-dismissed">{eventTypeLabel(event.type)}</span>
+              <span className="font-mono text-xs text-muted">{formatPlantDateTime(event.timestamp)}</span>
+              <span className="rounded bg-dismissed-soft px-1.5 text-xs font-semibold text-dismissed">{eventTypeLabel(event.type)}</span>
               <span>{event.description}</span>
             </li>
           ))}

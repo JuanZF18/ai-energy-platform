@@ -37,6 +37,6 @@ public static class ShiftFacts
     }
 
     private static string Describe(RelatedEvent related) => related.Relation == EventRelation.ExplainsChange
-        ? $"Coincide con {related.Event.Type.WithIndefiniteArticle()} del {Moment(related.Event.Timestamp)}: \"{related.Event.Description}\""
-        : $"{Capitalized(related.Event.Type.WithDefiniteArticle())} del {Moment(related.Event.Timestamp)} (\"{related.Event.Description}\") no explica el cambio";
+        ? $"Coincide con {related.Event.Type.WithIndefiniteArticle()} del {Moment(related.Event.Timestamp)} (registro original: \"{related.Event.Description}\")"
+        : $"{Capitalized(related.Event.Type.WithDefiniteArticle())} del {Moment(related.Event.Timestamp)} no explica el cambio (registro original: \"{related.Event.Description}\")";
 }

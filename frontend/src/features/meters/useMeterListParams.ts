@@ -5,6 +5,8 @@ import type { MeterSortField, MeterStatusFilter, SortDirection } from '@/lib/typ
 const statusFilters: MeterStatusFilter[] = ['all', 'normal', 'alert', 'critical']
 const sortFields: MeterSortField[] = ['severity', 'consumption', 'variation', 'meterId']
 
+export const defaultMeterListParams: Required<MeterListParams> = { status: 'all', search: '', sortBy: 'severity', direction: 'descending' }
+
 function pick<T extends string>(value: string | null, allowed: T[], fallback: T): T {
   return allowed.includes(value as T) ? (value as T) : fallback
 }
@@ -13,10 +15,10 @@ export function useMeterListParams() {
   const [searchParams, setSearchParams] = useSearchParams()
 
   const params: Required<MeterListParams> = {
-    status: pick(searchParams.get('status'), statusFilters, 'all'),
+    status: pick(searchParams.get('status'), statusFilters, defaultMeterListParams.status),
     search: searchParams.get('search') ?? '',
-    sortBy: pick(searchParams.get('sortBy'), sortFields, 'severity'),
-    direction: pick<SortDirection>(searchParams.get('direction'), ['descending', 'ascending'], 'descending'),
+    sortBy: pick(searchParams.get('sortBy'), sortFields, defaultMeterListParams.sortBy),
+    direction: pick<SortDirection>(searchParams.get('direction'), ['descending', 'ascending'], defaultMeterListParams.direction),
   }
 
   function update(changes: Partial<MeterListParams>) {

@@ -5,6 +5,7 @@ import { ErrorMessage, LoadingBlock, StateMessage } from '@/components/ui/States
 import { api } from '@/lib/api'
 import { queryKeys } from '@/lib/queryKeys'
 import { MeterFilters } from './MeterFilters'
+import { MeterCardList } from './MeterCardList'
 import { MeterTable } from './MeterTable'
 import { useMeterListParams } from './useMeterListParams'
 
@@ -44,7 +45,12 @@ export default function MetersPage() {
           description={`No hay medidores que coincidan con "${searchText}" y el filtro elegido. Prueba con otro identificador o quita los filtros.`}
         />
       )}
-      {meters.data && meters.data.length > 0 && <MeterTable meters={meters.data} />}
+      {meters.data && meters.data.length > 0 && (
+        <>
+          <MeterCardList meters={meters.data} />
+          <MeterTable meters={meters.data} />
+        </>
+      )}
     </>
   )
 }

@@ -58,9 +58,9 @@ public static class ShiftFindingComposer
         return type switch
         {
             AnomalyType.FalsePositive =>
-                $"Caída de {Percent(consumption.MeanHourlyDeviationPercent)} durante {shift.Hours} h el {Day(shift.Start)}, explicada por {EventName(explainingEvent)} (\"{explainingEvent?.Description}\").",
+                $"Caída de {Percent(consumption.MeanHourlyDeviationPercent)} durante {shift.Hours} h el {Day(shift.Start)}, explicada por {EventName(explainingEvent)}.",
             AnomalyType.ExplainableAnomaly =>
-                $"Consumo {Percent(variation)} {side} de lo esperado desde el {Moment(shift.Start)}, coincide con {EventName(explainingEvent)} (\"{explainingEvent?.Description}\").",
+                $"Consumo {Percent(variation)} {side} de lo esperado desde el {Moment(shift.Start)}, coincide con {EventName(explainingEvent)}.",
             _ =>
                 $"Consumo {Percent(variation)} {side} de lo esperado desde el {Moment(shift.Start)}, sin un evento operativo que lo explique."
         };

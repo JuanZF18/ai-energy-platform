@@ -1,16 +1,8 @@
 import { Fragment } from 'react'
 import { useNavigate } from 'react-router'
 import { AnomalyTypeChip, ConfidenceMeter, SeverityIndicator, StatusPill } from '@/components/ui/Badges'
-import { anomalyStatusLabel, shortActionLabel } from '@/lib/labels'
-import type { Tone } from '@/lib/labels'
-import type { AnomalyListItem, AnomalyStatus } from '@/lib/types'
-
-const statusTone: Record<AnomalyStatus, Tone> = {
-  OPEN: 'alert',
-  INVESTIGATING: 'accent',
-  RESOLVED: 'ok',
-  DISMISSED: 'dismissed',
-}
+import { anomalyStatusLabel, anomalyStatusTone, shortActionLabel } from '@/lib/labels'
+import type { AnomalyListItem } from '@/lib/types'
 
 export function AnomalyTable({ anomalies }: { anomalies: AnomalyListItem[] }) {
   const navigate = useNavigate()
@@ -30,7 +22,7 @@ export function AnomalyTable({ anomalies }: { anomalies: AnomalyListItem[] }) {
         <td className="px-3 py-2.5 font-mono text-muted">{anomaly.rank}</td>
         <td className="px-3 py-2.5">
           <div className="font-mono text-[12.5px] font-semibold">{anomaly.meterId}</div>
-          <div className="text-[11.5px] text-muted">{anomaly.meterName}</div>
+          <div className="text-xs text-muted">{anomaly.meterName}</div>
         </td>
         <td className="px-3 py-2.5">
           <AnomalyTypeChip type={anomaly.type} />
@@ -46,17 +38,17 @@ export function AnomalyTable({ anomalies }: { anomalies: AnomalyListItem[] }) {
           <b className="font-semibold">{shortActionLabel[anomaly.type]}</b>
         </td>
         <td className="px-3 py-2.5">
-          <StatusPill tone={statusTone[anomaly.status]} label={anomalyStatusLabel[anomaly.status]} />
+          <StatusPill tone={anomalyStatusTone[anomaly.status]} label={anomalyStatusLabel[anomaly.status]} />
         </td>
       </tr>
     )
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-line bg-surface">
+    <div className="hidden overflow-x-auto rounded-xl border border-line bg-surface xl:block">
       <table className="w-full min-w-[980px] border-collapse text-[13px]">
         <thead>
-          <tr className="border-b border-line text-left text-[11px] font-semibold text-muted">
+          <tr className="border-b border-line text-left text-xs font-semibold text-muted">
             <th className="px-3 py-2.5">#</th>
             <th className="px-3 py-2.5">Medidor</th>
             <th className="px-3 py-2.5">Tipo</th>
@@ -72,7 +64,7 @@ export function AnomalyTable({ anomalies }: { anomalies: AnomalyListItem[] }) {
           {dismissedByAi.length > 0 && (
             <Fragment>
               <tr>
-                <td colSpan={8} className="bg-surface-2 px-3 py-1.5 text-[11px] font-semibold tracking-wide text-muted uppercase">
+                <td colSpan={8} className="bg-surface-2 px-3 py-1.5 text-xs font-semibold tracking-wide text-muted uppercase">
                   Descartadas por la IA · se muestran para transparencia
                 </td>
               </tr>

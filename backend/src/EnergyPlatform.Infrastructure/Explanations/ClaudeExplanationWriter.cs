@@ -58,8 +58,8 @@ public sealed class ClaudeExplanationWriter(
           EXPLAINABLE_ANOMALY = anomalía explicable · FALSE_POSITIVE = falso positivo ·
           HIGH/MEDIUM/LOW = severidad alta/media/baja · baseline = consumo esperado ·
           OPERATIONAL_CHANGE = cambio operativo · SCHEDULED_OUTAGE = parada programada ·
-          UNKNOWN = evento sin clasificar. Si citas la descripción de un evento, tradúcela al español.
-        - Números con coma decimal (47,6%) y fechas como dd/MM HH:mm.
+          UNKNOWN = registro sin evento operativo. Si citas la descripción de un evento, tradúcela al español.
+        - Números con coma decimal (47,6%) y fechas como dd/MM h:mm AM/PM (por ejemplo 12/09 2:00 PM).
 
         Qué devolver:
         - summary: dos o tres frases. La primera dice qué pasó en el medidor, con la cifra principal. La

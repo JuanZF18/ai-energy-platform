@@ -23,10 +23,10 @@ export const navigationItems: NavigationItem[] = [
 export function Sidebar() {
   const { session, signOut } = useAuth()
   const dashboard = useQuery({ queryKey: queryKeys.dashboard, queryFn: api.dashboard })
-  const activeAnomalies = dashboard.data?.anomalies.anomalies ?? 0
+  const priorityAnomalies = dashboard.data?.anomalies.highPriority ?? 0
 
   return (
-    <aside className="hidden w-52 shrink-0 flex-col gap-1 bg-nav px-3 py-4 text-nav-ink md:flex">
+    <aside className="sticky top-0 hidden h-dvh w-52 shrink-0 flex-col gap-1 bg-nav px-3 py-4 text-nav-ink md:flex">
       <div className="px-2 pb-5">
         <Brand />
       </div>
@@ -42,9 +42,9 @@ export function Sidebar() {
           >
             <Icon className="size-[18px] opacity-85" aria-hidden />
             {label}
-            {to === '/anomalies' && activeAnomalies > 0 && (
-              <span className="ml-auto rounded-full bg-critical px-1.5 font-mono text-[10.5px] font-bold text-white" title={`${activeAnomalies} anomalías por atender`} aria-label={`${activeAnomalies} anomalías por atender`}>
-                {activeAnomalies}
+            {to === '/anomalies' && priorityAnomalies > 0 && (
+              <span className="ml-auto rounded-full bg-critical px-1.5 font-mono text-[10.5px] font-bold text-white" title={`${priorityAnomalies} de atención prioritaria`} aria-label={`${priorityAnomalies} de atención prioritaria`}>
+                {priorityAnomalies}
               </span>
             )}
           </NavLink>
@@ -54,8 +54,8 @@ export function Sidebar() {
         <span className="grid size-7 place-items-center rounded-full bg-[#2b5566] text-[11px] font-bold text-white uppercase">{initials(session?.name)}</span>
         <div className="grid">
           <span className="text-white">{session?.name}</span>
-          <button type="button" onClick={signOut} className="flex items-center gap-1 text-left opacity-75 hover:opacity-100">
-            <LogOut className="size-3" aria-hidden />
+          <button type="button" onClick={signOut} className="mt-1 flex items-center gap-1.5 rounded-md bg-critical/20 px-2 py-1 text-left font-semibold text-critical-on-dark hover:bg-critical hover:text-white">
+            <LogOut className="size-3.5" aria-hidden />
             Cerrar sesión
           </button>
         </div>

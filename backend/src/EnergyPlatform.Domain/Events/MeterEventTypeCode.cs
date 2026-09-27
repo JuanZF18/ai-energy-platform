@@ -15,7 +15,7 @@ public static class MeterEventTypeCode
         [MeterEventType.OperationalChange] = ("un cambio operativo", "el cambio operativo"),
         [MeterEventType.ScheduledOutage] = ("una parada programada", "la parada programada"),
         [MeterEventType.DataQuality] = ("un reporte de falla de datos", "el reporte de falla de datos"),
-        [MeterEventType.Unknown] = ("un evento sin clasificar", "el evento sin clasificar")
+        [MeterEventType.Unknown] = ("un registro sin evento operativo", "el registro sin evento operativo")
     };
 
     public static string ToCode(this MeterEventType type) => Codes[type];

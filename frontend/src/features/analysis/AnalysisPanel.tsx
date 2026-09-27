@@ -40,7 +40,7 @@ export function AnalysisPanel({ run, startError, onRetry, onClose }: AnalysisPan
   const first = topAnomaly.data?.[0]
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-nav/40 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 grid items-start justify-items-center overflow-y-auto bg-nav/40 p-4 pt-[8vh]" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"
@@ -87,7 +87,7 @@ export function AnalysisPanel({ run, startError, onRetry, onClose }: AnalysisPan
           </div>
         )}
 
-        <p className="text-xs text-faint">Puedes cerrar este panel: el análisis sigue y su estado queda en la barra superior.</p>
+        <p className="text-xs text-muted">Puedes cerrar este panel: el análisis sigue y su estado queda en la barra superior.</p>
       </div>
     </div>
   )

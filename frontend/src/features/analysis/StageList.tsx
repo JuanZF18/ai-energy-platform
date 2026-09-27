@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react'
+import { Check, LoaderCircle } from 'lucide-react'
 import { formatSeconds } from '@/lib/format'
 import type { AnalysisStage, StageProgress } from '@/lib/types'
 
@@ -23,7 +23,7 @@ export function StageList({ stages }: { stages: StageProgress[] }) {
             <p className="text-[13px] font-semibold">{stage.label}</p>
             <p className="text-xs text-muted">{stageDescriptions[stage.stage]}</p>
           </div>
-          <span className="font-mono text-[11px] text-faint">{stage.state === 'DONE' ? formatSeconds(stage.durationSeconds) : ''}</span>
+          <span className="font-mono text-xs text-muted">{stage.state === 'DONE' ? formatSeconds(stage.durationSeconds) : ''}</span>
         </li>
       ))}
     </ol>
@@ -39,7 +39,11 @@ function StageMarker({ state, position }: { state: StageProgress['state']; posit
     )
   }
   if (state === 'RUNNING') {
-    return <span className="z-10 grid size-[22px] animate-pulse place-items-center rounded-full bg-accent text-[11px] font-bold text-white ring-4 ring-accent-soft">{position}</span>
+    return (
+      <span className="z-10 grid size-[22px] place-items-center rounded-full bg-accent text-white ring-4 ring-accent-soft">
+        <LoaderCircle className="size-3.5 animate-spin" strokeWidth={3} aria-label="En curso" />
+      </span>
+    )
   }
-  return <span className="z-10 grid size-[22px] place-items-center rounded-full border border-line bg-surface-2 text-[11px] font-bold text-faint">{position}</span>
+  return <span className="z-10 grid size-[22px] place-items-center rounded-full border border-line bg-surface-2 text-[11px] font-bold text-muted">{position}</span>
 }

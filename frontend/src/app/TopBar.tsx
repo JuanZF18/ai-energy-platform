@@ -1,38 +1,27 @@
 import { useQuery } from '@tanstack/react-query'
-import { NavLink } from 'react-router'
+import { LogOut } from 'lucide-react'
 import { BrandMark } from '@/components/BrandMark'
 import { RunAnalysisButton } from '@/features/analysis/RunAnalysisButton'
+import { useAuth } from '@/features/auth/AuthContext'
 import { api } from '@/lib/api'
 import { formatLocalDateTime } from '@/lib/format'
 import { queryKeys } from '@/lib/queryKeys'
 import { MeterSearch } from './MeterSearch'
-import { navigationItems } from './Sidebar'
 
 export function TopBar() {
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface">
-      <div className="flex h-14 items-center gap-3 px-4 md:px-5">
-        <div className="md:hidden">
-          <BrandMark />
+      <div className="flex h-16 items-center gap-2 px-3 md:h-14 md:gap-3 md:px-5">
+        <div className="shrink-0 md:hidden">
+          <BrandMark size={30} />
         </div>
-        <div className="ml-auto flex items-center gap-3">
-          <MeterSearch />
+        <MeterSearch />
+        <div className="ml-auto flex shrink-0 items-center gap-2 md:gap-3">
           <LastAnalysisChip />
           <RunAnalysisButton />
+          <MobileSignOutButton />
         </div>
       </div>
-      <nav aria-label="Principal" className="flex gap-1 overflow-x-auto border-t border-line px-3 py-1.5 md:hidden">
-        {navigationItems.map(({ to, label, end }) => (
-          <NavLink
-            key={to}
-            to={to}
-            end={end}
-            className={({ isActive }) => `rounded-md px-3 py-1.5 text-[13px] font-medium ${isActive ? 'bg-accent-soft text-accent' : 'text-muted'}`}
-          >
-            {label}
-          </NavLink>
-        ))}
-      </nav>
     </header>
   )
 }
@@ -62,5 +51,21 @@ function LastAnalysisChip() {
       <span className={`size-2 rounded-full ${lastAnalysis ? statusDot[lastAnalysis.status] : 'bg-line'}`} aria-hidden />
       {dashboard.isPending ? 'Cargando…' : lastAnalysis ? `Último análisis ${formatLocalDateTime(lastAnalysis.finishedAt ?? lastAnalysis.requestedAt)}` : 'Sin análisis todavía'}
     </span>
+  )
+}
+
+function MobileSignOutButton() {
+  const { signOut } = useAuth()
+
+  return (
+    <button
+      type="button"
+      onClick={signOut}
+      className="grid size-11 place-items-center rounded-lg border border-critical/30 bg-critical-soft text-critical hover:bg-critical hover:text-white md:hidden"
+      aria-label="Cerrar sesión"
+      title="Cerrar sesión"
+    >
+      <LogOut className="size-5" aria-hidden />
+    </button>
   )
 }

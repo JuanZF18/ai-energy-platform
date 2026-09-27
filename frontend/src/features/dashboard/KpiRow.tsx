@@ -16,6 +16,22 @@ export function KpiRow({ summary, hasAnalysis, priorityMeterIds }: KpiRowProps) 
 
   return (
     <div className="grid grid-cols-2 gap-2.5 md:grid-cols-3 xl:grid-cols-6">
+      <KpiCard
+        label="Atención prioritaria"
+        value={hasAnalysis ? <span className="text-critical">{anomalies.highPriority}</span> : '—'}
+        highlighted={hasAnalysis && anomalies.highPriority > 0}
+        hint={hasAnalysis && priorityMeterIds ? priorityMeterIds.join(' · ') || 'Ninguna' : undefined}
+      />
+      <KpiCard
+        label="Anomalías detectadas"
+        value={hasAnalysis ? anomalies.cases : '—'}
+        hint={hasAnalysis ? `${countLabel(anomalies.highPriority, 'prioritaria', 'prioritarias')} · ${anomalies.anomalies - anomalies.highPriority} por validar · ${countLabel(anomalies.dismissed, 'descartada', 'descartadas')}` : 'Ejecuta el análisis'}
+      />
+      <KpiCard
+        label="Confianza de la IA"
+        value={formatConfidence(aggregateConfidence)}
+        hint={aggregateConfidence !== null ? `${confidenceLabel(aggregateConfidence)} · qué tan segura está la IA, en promedio` : 'Sin datos'}
+      />
       <KpiCard label="Medidores" value={meters.total} hint={hasAnalysis ? `${countLabel(meters.ok, 'normal', 'normales')} · ${meters.alert} en alerta · ${countLabel(meters.critical, 'crítico', 'críticos')}` : 'Sin analizar'}>
         <div className="mt-1 flex h-1.5 gap-0.5 overflow-hidden rounded" aria-hidden>
           <span className="bg-ok" style={{ flex: meters.ok }} />
@@ -31,23 +47,6 @@ export function KpiRow({ summary, hasAnalysis, priorityMeterIds }: KpiRowProps) 
         hint={`14 días · último día: ${formatKwh(consumption.lastDayKwh)}`}
       />
       <KpiCard
-        label="Casos detectados por la IA"
-        value={hasAnalysis ? anomalies.cases : '—'}
-        unit={hasAnalysis ? 'casos' : undefined}
-        hint={hasAnalysis ? `${anomalies.anomalies} por atender · ${countLabel(anomalies.dismissed, 'falso positivo descartado', 'falsos positivos descartados')}` : 'Ejecuta el análisis'}
-      />
-      <KpiCard
-        label="Atender primero"
-        value={hasAnalysis ? <span className="text-critical">{anomalies.highPriority}</span> : '—'}
-        highlighted={hasAnalysis && anomalies.highPriority > 0}
-        hint={hasAnalysis && priorityMeterIds ? priorityMeterIds.join(' · ') || 'Ninguna' : undefined}
-      />
-      <KpiCard
-        label="Confianza de la IA"
-        value={formatConfidence(aggregateConfidence)}
-        hint={aggregateConfidence !== null ? `${confidenceLabel(aggregateConfidence)} · qué tan segura está la IA, en promedio` : 'Sin datos'}
-      />
-      <KpiCard
         label="Último análisis"
         value={<span className="text-lg">{lastAnalysis ? formatLocalDateTime(lastAnalysis.finishedAt ?? lastAnalysis.requestedAt) : '—'}</span>}
         hint={lastAnalysis ? <LastAnalysisStatus status={lastAnalysis.status} seconds={lastAnalysis.durationSeconds} /> : 'Todavía no se ejecuta'}
@@ -59,8 +58,8 @@ export function KpiRow({ summary, hasAnalysis, priorityMeterIds }: KpiRowProps) 
 function LastAnalysisStatus({ status, seconds }: { status: string; seconds: number | null }) {
   if (status === 'COMPLETED') {
     return (
-      <span className="flex items-center gap-1.5">
-        <StatusPill tone="ok" label="Completado" /> en {formatSeconds(seconds)}
+      <span className="flex flex-wrap items-center gap-1.5">
+        <StatusPill tone="ok" label="Completado" /> <span className="whitespace-nowrap">en {formatSeconds(seconds)}</span>
       </span>
     )
   }

@@ -4,7 +4,7 @@ import { api } from '@/lib/api'
 import { analysisDependentKeys, queryKeys } from '@/lib/queryKeys'
 import type { AnalysisRun } from '@/lib/types'
 
-const pollingIntervalMs = 700
+const pollingIntervalMs = 250
 
 export function isFinished(run: AnalysisRun | undefined) {
   return run?.status === 'COMPLETED' || run?.status === 'FAILED'

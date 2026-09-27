@@ -2,8 +2,10 @@ import { useQuery } from '@tanstack/react-query'
 import { PageHeader } from '@/components/ui/PageHeader'
 import { ErrorMessage, LoadingBlock, StateMessage } from '@/components/ui/States'
 import { RunAnalysisButton } from '@/features/analysis/RunAnalysisButton'
+import { useAuth } from '@/features/auth/AuthContext'
+import { defaultMeterListParams } from '@/features/meters/useMeterListParams'
 import { api } from '@/lib/api'
-import { formatPlantDay } from '@/lib/format'
+import { countLabel, formatPlantDay } from '@/lib/format'
 import { queryKeys } from '@/lib/queryKeys'
 import { FleetConsumptionChart } from './FleetConsumptionChart'
 import { FleetStatus } from './FleetStatus'
@@ -15,10 +17,17 @@ function greeting() {
   return hour < 12 ? 'Buenos días' : hour < 19 ? 'Buenas tardes' : 'Buenas noches'
 }
 
+function headline(hasAnalysis: boolean, priorityCount: number) {
+  if (!hasAnalysis) return 'Panel general'
+  if (priorityCount === 0) return 'Ningún medidor requiere atención prioritaria'
+  return `${countLabel(priorityCount, 'medidor requiere', 'medidores requieren')} atención prioritaria`
+}
+
 export default function DashboardPage() {
+  const { session } = useAuth()
   const dashboard = useQuery({ queryKey: queryKeys.dashboard, queryFn: api.dashboard })
   const queue = useQuery({ queryKey: queryKeys.anomalies({ limit: 5 }), queryFn: () => api.anomalies({ limit: 5 }) })
-  const meters = useQuery({ queryKey: queryKeys.meters({}), queryFn: () => api.meters() })
+  const meters = useQuery({ queryKey: queryKeys.meters(defaultMeterListParams), queryFn: () => api.meters(defaultMeterListParams) })
 
   if (dashboard.isPending) return <LoadingBlock rows={8} />
   if (dashboard.isError) return <ErrorMessage error={dashboard.error} onRetry={() => dashboard.refetch()} />
@@ -29,7 +38,8 @@ export default function DashboardPage() {
   return (
     <>
       <PageHeader
-        title={greeting()}
+        eyebrow={session ? `${greeting()}, ${session.name}` : greeting()}
+        title={headline(hasAnalysis, summary.anomalies.highPriority)}
         description={`Período analizado: ${formatPlantDay(summary.consumption.periodStart)} – ${formatPlantDay(summary.consumption.periodEnd)} · ${summary.meters.total} medidores · lectura horaria`}
       />
       {!hasAnalysis && (

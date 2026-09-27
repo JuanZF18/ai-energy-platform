@@ -1,6 +1,6 @@
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceArea, ReferenceLine, ResponsiveContainer, Scatter, Tooltip, XAxis, YAxis } from 'recharts'
 import { formatNumber, formatPlantDateTime } from '@/lib/format'
-import { eventTypeLabel } from '@/lib/labels'
+import { eventTypeColor, eventTypeLabel } from '@/lib/labels'
 import type { EvidenceWindow, MeterEvent } from '@/lib/types'
 import type { ChartPoint } from './chartData'
 import { dayTicks, formatTick } from './chartData'
@@ -47,10 +47,10 @@ export function ConsumptionChart({ points, hoursPerTick, anomalyWindow, events, 
             <ReferenceLine
               key={event.timestamp}
               x={Date.parse(event.timestamp)}
-              stroke="var(--color-critical)"
+              stroke={eventTypeColor(event.type)}
               strokeDasharray="4 3"
               ifOverflow="hidden"
-              label={{ value: eventTypeLabel(event.type), position: 'insideTopRight', fontSize: 10.5, fill: 'var(--color-critical)' }}
+              label={{ value: eventTypeLabel(event.type), position: 'insideTopRight', fontSize: 11, fill: eventTypeColor(event.type) }}
             />
           ))}
         </ComposedChart>

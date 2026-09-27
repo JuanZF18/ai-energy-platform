@@ -12,12 +12,12 @@ interface KpiCardProps {
 export function KpiCard({ label, value, unit, hint, highlighted = false, children }: KpiCardProps) {
   return (
     <div
-      className={`grid content-start gap-1 rounded-xl border bg-surface px-4 py-3 ${highlighted ? 'border-critical shadow-[inset_3px_0_0_var(--color-critical)]' : 'border-line'}`}
+      className={`grid min-w-0 content-start gap-1 rounded-xl border bg-surface px-3 py-3 sm:px-4 ${highlighted ? 'border-critical shadow-[inset_3px_0_0_var(--color-critical)]' : 'border-line'}`}
     >
       <span className="text-xs font-medium text-muted">{label}</span>
-      <span className="font-display text-[26px] leading-tight font-bold tabular">
+      <span className="flex flex-wrap items-baseline gap-x-1 font-display text-[22px] leading-tight font-bold tabular sm:text-[26px]">
         {value}
-        {unit && <small className="ml-1 text-[13px] font-semibold text-muted">{unit}</small>}
+        {unit && <small className="text-[13px] font-semibold text-muted">{unit}</small>}
       </span>
       {children}
       {hint && <span className="text-xs text-muted">{hint}</span>}

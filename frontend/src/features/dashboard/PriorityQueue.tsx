@@ -1,5 +1,5 @@
-import { Link } from 'react-router'
 import { AnomalyTypeChip, SeverityIndicator } from '@/components/ui/Badges'
+import { ButtonLink } from '@/components/ui/Button'
 import { Card, CardHeader } from '@/components/ui/Card'
 import { anomalyStatusLabel, anomalyTypeTone, shortActionLabel, toneClasses } from '@/lib/labels'
 import type { AnomalyListItem } from '@/lib/types'
@@ -14,9 +14,9 @@ export function PriorityQueue({ anomalies }: { anomalies: AnomalyListItem[] }) {
         title="Requiere atención"
         aside="De la más a la menos urgente"
         action={
-          <Link to="/anomalies" className="text-[13px] font-semibold text-accent hover:underline">
+          <ButtonLink to="/anomalies" variant="ghost" className="-my-1.5">
             Ver todas →
-          </Link>
+          </ButtonLink>
         }
       />
       {toAttend.length === 0 ? (
@@ -29,18 +29,18 @@ export function PriorityQueue({ anomalies }: { anomalies: AnomalyListItem[] }) {
         </ol>
       )}
       {dismissed.map((anomaly) => (
-        <Link
-          key={anomaly.id}
-          to={`/anomalies/${anomaly.id}`}
-          className="grid gap-0.5 rounded-lg bg-surface-2 px-3 py-2 text-[12.5px] text-muted hover:text-ink"
-        >
-          <span className="flex flex-wrap items-center gap-x-2">
-            <span className="font-mono font-semibold text-ink">{anomaly.meterId}</span>
-            <span className="font-semibold">Falso positivo: la IA lo descartó, no requiere atención</span>
-            <span className="ml-auto font-semibold text-accent">Ver por qué →</span>
+        <div key={anomaly.id} className="grid gap-2 rounded-lg bg-surface-2 px-3 py-2.5 text-[13px] text-muted sm:grid-cols-[1fr_auto] sm:items-center">
+          <span className="grid gap-0.5">
+            <span className="flex flex-wrap items-center gap-x-2">
+              <span className="font-mono font-semibold text-ink">{anomaly.meterId}</span>
+              <span className="font-semibold">Falso positivo: la IA lo descartó, no requiere atención</span>
+            </span>
+            <span>{anomaly.reason}</span>
           </span>
-          <span>{anomaly.reason}</span>
-        </Link>
+          <ButtonLink to={`/anomalies/${anomaly.id}`} variant="secondary" className="sm:w-44">
+            Ver por qué →
+          </ButtonLink>
+        </div>
       ))}
     </Card>
   )
@@ -51,25 +51,26 @@ function QueueItem({ anomaly }: { anomaly: AnomalyListItem }) {
   const isPriority = anomaly.rank <= 2
 
   return (
-    <li className="relative overflow-hidden rounded-lg border border-line bg-surface">
+    <li className="relative grid grid-cols-[28px_1fr] items-center gap-x-3 gap-y-2 overflow-hidden rounded-lg border border-line bg-surface py-2.5 pr-3 pl-4 sm:grid-cols-[28px_64px_1fr_auto]">
       <span className={`absolute inset-y-0 left-0 w-1 ${tone.solid}`} aria-hidden />
-      <Link to={`/anomalies/${anomaly.id}`} className="grid grid-cols-[28px_64px_1fr] items-center gap-3 py-2.5 pr-3 pl-4 hover:bg-surface-2 sm:grid-cols-[28px_64px_1fr_auto]">
-        <span className="font-mono text-[13px] font-bold text-muted">#{anomaly.rank}</span>
-        <span className="font-mono text-[13px] font-semibold">{anomaly.meterId}</span>
-        <span className="grid gap-1">
-          <span className="flex flex-wrap items-center gap-2">
-            <AnomalyTypeChip type={anomaly.type} />
-            <SeverityIndicator severity={anomaly.severity} />
-            {anomaly.status !== 'OPEN' && <span className="text-xs text-muted">· {anomalyStatusLabel[anomaly.status]}</span>}
-          </span>
-          <span className="text-[12.5px] text-muted">{anomaly.reason}</span>
+      <span className="font-mono text-[13px] font-bold text-muted">#{anomaly.rank}</span>
+      <span className="hidden font-mono text-[13px] font-semibold sm:block">{anomaly.meterId}</span>
+      <span className="grid gap-1">
+        <span className="flex flex-wrap items-center gap-2">
+          <span className="font-mono text-[13px] font-semibold sm:hidden">{anomaly.meterId}</span>
+          <AnomalyTypeChip type={anomaly.type} />
+          <SeverityIndicator severity={anomaly.severity} />
+          {anomaly.status !== 'OPEN' && <span className="text-xs text-muted">· {anomalyStatusLabel[anomaly.status]}</span>}
         </span>
-        <span
-          className={`hidden rounded-lg px-3 py-1.5 text-[13px] font-semibold sm:inline-flex ${isPriority ? 'bg-accent text-white' : 'border border-line text-ink'}`}
-        >
-          {shortActionLabel[anomaly.type]} →
-        </span>
-      </Link>
+        <span className="text-[13px] text-muted">{anomaly.reason}</span>
+      </span>
+      <ButtonLink
+        to={`/anomalies/${anomaly.id}`}
+        variant={isPriority ? 'primary' : 'secondary'}
+        className="col-start-2 sm:col-start-auto sm:w-44"
+      >
+        {shortActionLabel[anomaly.type]} →
+      </ButtonLink>
     </li>
   )
 }

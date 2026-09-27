@@ -9,6 +9,7 @@ import { countLabel, formatLocalDateTime } from '@/lib/format'
 import { anomalyStatusLabel } from '@/lib/labels'
 import { queryKeys } from '@/lib/queryKeys'
 import type { AnomalyStatus, AnomalyType } from '@/lib/types'
+import { AnomalyCardList } from './AnomalyCardList'
 import { AnomalyTable } from './AnomalyTable'
 
 type TypeFilter = 'ALL' | AnomalyType
@@ -41,7 +42,7 @@ export default function AnomaliesPage() {
         title="Anomalías IA"
         description={
           all.length > 0 && summary
-            ? `Análisis del ${formatLocalDateTime(lastAnalysis?.finishedAt)} · ${summary.cases} casos · ${summary.highPriority} para atender primero · ${countLabel(summary.dismissed, 'descartado', 'descartados')}`
+            ? `Análisis del ${formatLocalDateTime(lastAnalysis?.finishedAt)} · ${countLabel(summary.cases, 'anomalía detectada', 'anomalías detectadas')} · ${countLabel(summary.highPriority, 'prioritaria', 'prioritarias')} · ${countLabel(summary.dismissed, 'descartada', 'descartadas')}`
             : 'Casos detectados por el último análisis, ordenados por prioridad'
         }
       />
@@ -64,13 +65,13 @@ export default function AnomaliesPage() {
                 count: option.value === 'ALL' ? all.length : all.filter((anomaly) => anomaly.type === option.value).length,
               }))}
             />
-            <label className="ml-auto flex items-center gap-1.5 text-[13px] text-muted">
+            <label className="flex w-full items-center gap-2 text-sm text-muted sm:ml-auto sm:w-auto sm:text-[13px]">
               Estado
               <select
                 id="anomaly-status-filter"
                 value={statusFilter}
                 onChange={(event) => setStatusFilter(event.target.value as 'ALL' | AnomalyStatus)}
-                className="h-8 rounded-lg border border-line bg-surface px-2 text-[13px] font-semibold text-ink"
+                className="h-11 flex-1 rounded-lg border border-line bg-surface px-2 text-sm font-semibold text-ink sm:h-8 sm:flex-none sm:text-[13px]"
               >
                 <option value="ALL">Todos</option>
                 {(Object.keys(anomalyStatusLabel) as AnomalyStatus[]).map((status) => (
@@ -84,7 +85,10 @@ export default function AnomaliesPage() {
           {visible.length === 0 ? (
             <StateMessage eyebrow="Sin resultados" title="Ningún caso coincide con los filtros" description="Cambia el tipo o el estado para ver otros casos." />
           ) : (
-            <AnomalyTable anomalies={visible} />
+            <>
+              <AnomalyCardList anomalies={visible} />
+              <AnomalyTable anomalies={visible} />
+            </>
           )}
         </>
       )}

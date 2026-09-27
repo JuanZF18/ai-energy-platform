@@ -94,12 +94,12 @@ function MeterDetailView({ meter }: { meter: MeterDetail }) {
 
 function ChartLegend({ hasWindow, hasSuspects, hasEvents }: { hasWindow: boolean; hasSuspects: boolean; hasEvents: boolean }) {
   return (
-    <div className="flex flex-wrap gap-4 text-[11.5px] text-muted">
+    <div className="flex flex-wrap gap-4 text-xs text-muted">
       <LegendItem className="bg-accent" label="Consumo medido (kWh)" />
       <LegendItem className="bg-baseline" label="Consumo esperado" />
       {hasWindow && <LegendItem className="border border-critical bg-critical-soft" label="Periodo con anomalía" />}
       {hasSuspects && <LegendItem className="bg-quality" label="Lectura sospechosa" />}
-      {hasEvents && <LegendItem className="bg-critical" label="Evento registrado" />}
+      {hasEvents && <LegendItem className="h-3 w-0 rounded-none border-l-2 border-dashed border-muted" label="Evento registrado (línea punteada)" />}
     </div>
   )
 }

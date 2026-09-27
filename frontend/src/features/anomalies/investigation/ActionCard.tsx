@@ -38,7 +38,7 @@ export function ActionCard({ detail }: { detail: AnomalyDetail }) {
             return (
               <li key={status} aria-current={isCurrent ? 'step' : undefined} className="flex items-center gap-1.5">
                 {index > 0 && <span className="text-faint" aria-hidden>→</span>}
-                <span className={`flex items-center gap-1.5 ${isCurrent ? 'font-semibold text-ink' : 'text-faint'}`}>
+                <span className={`flex items-center gap-1.5 ${isCurrent ? 'font-semibold text-ink' : 'text-muted'}`}>
                   <span className={`size-2 rounded-full ${isCurrent ? 'bg-accent' : 'bg-line'}`} aria-hidden />
                   {anomalyStatusLabel[status]}
                 </span>

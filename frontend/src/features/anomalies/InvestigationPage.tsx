@@ -50,8 +50,8 @@ export default function InvestigationPage() {
           <FindingCard detail={detail} />
         </div>
         <aside className="grid gap-3 xl:sticky xl:top-[72px] xl:col-start-2 xl:row-span-2 xl:row-start-1">
-          <DecisionCard detail={detail} />
           <ActionCard detail={detail} />
+          <DecisionCard detail={detail} />
           <CaseTimeline detail={detail} />
         </aside>
         <div className="grid min-w-0 gap-3 xl:col-start-1 xl:row-start-2">

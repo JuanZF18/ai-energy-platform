@@ -36,7 +36,9 @@ function dateParts(iso: string, timeZone?: string) {
 
 function dateTimeText(iso: string, timeZone?: string) {
   const { day, month, hour, minute } = dateParts(iso, timeZone)
-  return `${day}/${month} ${hour}:${minute}`
+  const hour24 = Number(hour)
+  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12
+  return `${day}/${month} ${hour12}:${minute} ${hour24 < 12 ? 'AM' : 'PM'}`
 }
 
 export function formatPlantDateTime(iso: string | null | undefined) {

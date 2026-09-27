@@ -36,7 +36,7 @@ public static class DataQualityFacts
         facts.Add($"El consumo diario se mantiene estable ({SignedPercent(consumption.VariationPercent)} frente al consumo esperado)");
         facts.AddRange(events
             .Where(related => related.Relation == EventRelation.ConfirmsIssue)
-            .Select(related => $"{Capitalized(related.Event.Type.WithIndefiniteArticle())} del {Moment(related.Event.Timestamp)} lo confirma: \"{related.Event.Description}\""));
+            .Select(related => $"{Capitalized(related.Event.Type.WithIndefiniteArticle())} del {Moment(related.Event.Timestamp)} lo confirma (registro original: \"{related.Event.Description}\")"));
 
         return facts;
     }

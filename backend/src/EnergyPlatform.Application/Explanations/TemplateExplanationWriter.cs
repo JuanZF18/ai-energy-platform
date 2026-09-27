@@ -109,7 +109,7 @@ public sealed class TemplateExplanationWriter : IExplanationWriter
 
     private static IEnumerable<string> ExplainingEvents(Finding finding) => finding.Evidence.Events
         .Where(item => item.ExplainsChange)
-        .Select(item => $"{SpanishText.Capitalized(MeterEventTypeCode.FromCode(item.Type).WithIndefiniteArticle())} del {SpanishText.Moment(item.Timestamp)}: \"{item.Description}\"");
+        .Select(item => $"{SpanishText.Capitalized(MeterEventTypeCode.FromCode(item.Type).WithIndefiniteArticle())} del {SpanishText.Moment(item.Timestamp)} (registro original: \"{item.Description}\")");
 
     private static bool Increased(Finding finding) => finding.Evidence.Consumption.MeanHourlyDeviationPercent >= 0;
 

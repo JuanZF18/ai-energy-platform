@@ -17,7 +17,7 @@ public static class SpanishText
 
     public static string Number(double value, int decimals = 0) => value.ToString("N" + decimals, Numbers);
 
-    public static string Moment(DateTime timestamp) => timestamp.ToString("dd/MM HH:mm", CultureInfo.InvariantCulture);
+    public static string Moment(DateTime timestamp) => timestamp.ToString("dd/MM h:mm tt", CultureInfo.InvariantCulture);
 
     public static string Day(DateTime timestamp) => timestamp.ToString("dd/MM", CultureInfo.InvariantCulture);
 
