@@ -6,6 +6,7 @@
     <Project Path="src/EnergyPlatform.Infrastructure/EnergyPlatform.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/EnergyPlatform.Api.Tests/EnergyPlatform.Api.Tests.csproj" />
     <Project Path="tests/EnergyPlatform.Domain.Tests/EnergyPlatform.Domain.Tests.csproj" />
   </Folder>
 </Solution>
