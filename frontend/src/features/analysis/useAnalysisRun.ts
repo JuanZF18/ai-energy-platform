@@ -4,7 +4,9 @@ import { api } from '@/lib/api'
 import { analysisDependentKeys, queryKeys } from '@/lib/queryKeys'
 import type { AnalysisRun } from '@/lib/types'
 
-const pollingIntervalMs = 250
+const fastPollingIntervalMs = 250
+const slowPollingIntervalMs = 1000
+const fastPollingResponses = 20
 
 export function isFinished(run: AnalysisRun | undefined) {
   return run?.status === 'COMPLETED' || run?.status === 'FAILED'
@@ -18,7 +20,10 @@ export function useAnalysisRun(runId: string | null) {
     queryKey: queryKeys.analysis(runId ?? 'none'),
     queryFn: () => api.analysis(runId!),
     enabled: runId !== null,
-    refetchInterval: (current) => (isFinished(current.state.data) ? false : pollingIntervalMs),
+    refetchInterval: (current) => {
+      if (isFinished(current.state.data)) return false
+      return current.state.dataUpdateCount < fastPollingResponses ? fastPollingIntervalMs : slowPollingIntervalMs
+    },
     refetchIntervalInBackground: true,
   })
 

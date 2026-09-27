@@ -22,6 +22,9 @@ export function StageList({ stages }: { stages: StageProgress[] }) {
           <div>
             <p className="text-[13px] font-semibold">{stage.label}</p>
             <p className="text-xs text-muted">{stageDescriptions[stage.stage]}</p>
+            {stage.stage === 'EXPLANATION' && stage.state === 'RUNNING' && (
+              <p className="text-xs font-medium text-accent">La IA está redactando las explicaciones; puede tardar unos segundos.</p>
+            )}
           </div>
           <span className="font-mono text-xs text-muted">{stage.state === 'DONE' ? formatSeconds(stage.durationSeconds) : ''}</span>
         </li>
