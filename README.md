@@ -32,6 +32,7 @@ Es la solución a la prueba técnica **AI Energy Management Platform** de Bia En
 
 | | |
 |---|---|
+| **Video de la demo** | [Ver en Google Drive](https://drive.google.com/file/d/1sphM0TfVksFZHqfiCynhS4kvq2I40_GY/view?usp=sharing) |
 | **Aplicación** | https://vatio-energy.web.app |
 | **Cuenta demo** | `demo@vatio.app` · `demo1234` |
 | **Documentación de la API** | https://vatio-api.fly.dev/docs |
@@ -39,12 +40,12 @@ Es la solución a la prueba técnica **AI Energy Management Platform** de Bia En
 Recorrido sugerido (el mismo de la sección 21 del reto):
 
 1. **Iniciar sesión** con la cuenta demo.
-2. En el **Panel general**, pulsar **Analizar con IA**. El panel muestra las 7 etapas del análisis y termina con *"4 anomalías detectadas · 2 requieren atención prioritaria"*.
+2. En el **Panel general**, pulsar **Analizar con IA**. Se abre un panel con las 7 etapas del análisis, que termina con *"4 anomalías detectadas · 2 requieren atención prioritaria"*. En producción tarda unos 25 segundos, porque Claude redacta las explicaciones.
 3. Pulsar **Ver M-109 (prioridad 1)**.
 4. Leer **qué encontró la IA**, la **evidencia** y la **confianza**.
 5. En **Qué hacer**, registrar la acción: *Iniciar investigación*, con una nota para el equipo.
 
-> La API está en un plan gratuito que se suspende cuando no se usa. La primera petición puede tardar unos segundos mientras despierta.
+> La API se suspende cuando no se usa y despierta con la primera petición, en 1 a 2 segundos.
 
 ## 2. Qué problema resuelve
 
@@ -74,7 +75,7 @@ El valor está en el ciclo completo **DATOS → ANÁLISIS → ANOMALÍA → EXPL
 | **Priorización** | Anomalía real, severidad alta, 95 % de confianza: **prioridad 1**. |
 | **Acción** | *Investigar medidor e instalación*, con causas probables y pasos en orden. |
 
-La IA no se limita a decir sí o no: clasifica, explica con cifras y recomienda. Además, **descarta falsos positivos**: la caída de M-106 coincide con una parada programada y no se escala.
+El análisis no se limita a decir sí o no: clasifica, explica con cifras y recomienda. Además, **descarta falsos positivos**: la caída de M-106 coincide con una parada programada y no se escala. Las decisiones las toma un motor estadístico verificable y la IA (Claude) las explica en lenguaje claro; la sección 5 detalla quién hace qué.
 
 ![Investigación de M-109](docs/img/investigacion.png)
 
@@ -131,7 +132,7 @@ Son las mismas de la sección 13 del reto. El botón **Analizar con IA** las eje
 | 6. Explicación | Clasifica cada caso y redacta la explicación con su evidencia. |
 | 7. Recomendación | Asigna la acción, calcula la prioridad y actualiza el estado de cada medidor. |
 
-El cálculo real tarda milisegundos. Cada etapa espera un mínimo de 0,35 s (`Analysis:Pacing`) para que la persona alcance a ver el avance que pide el reto.
+El cálculo tarda milisegundos. Cada etapa espera un mínimo de 0,35 s (`Analysis:Pacing`) para que la persona alcance a ver el avance que pide el reto. Con Claude activo, la etapa de explicación tarda unos 20 segundos (una llamada de 5 a 9 s por caso); sin Claude, el análisis completo tarda unos 2,5 segundos.
 
 ### 5.2 Cuándo se abre un caso: gravedad × duración
 
@@ -166,7 +167,7 @@ Una lectura es **imposible** si su factor de potencia o la relación entre el co
 
 ### 5.4 Confianza
 
-La confianza dice qué tan segura está la IA de su conclusión. Combina tres factores:
+La confianza dice qué tan seguro está el análisis de su conclusión. La calcula el motor, no el modelo de lenguaje, y combina tres factores:
 
 - **Tamaño del cambio** (40 %): qué tan lejos está del consumo esperado.
 - **Duración** (30 %): cuántas horas seguidas se mantuvo.
@@ -176,7 +177,7 @@ La confianza dice qué tan segura está la IA de su conclusión. Combina tres fa
 confianza = 50 % + 45 % × (0,4 × tamaño + 0,3 × duración + 0,3 × confirmación)
 ```
 
-El resultado va de 50 % a 95 %. **La IA nunca afirma certeza total**, por eso con los tres factores al máximo marca 95 %.
+El resultado va de 50 % a 95 %. **El análisis nunca afirma certeza total**, por eso con los tres factores al máximo marca 95 %.
 
 ### 5.5 Prioridad
 
@@ -197,7 +198,7 @@ Una anomalía real de severidad alta siempre queda por encima de una explicable 
 
 - **Con una llave de Anthropic**, Claude (`claude-sonnet-5`) redacta la explicación a partir de la evidencia. Tiene prohibido cambiar la clasificación, la severidad o la confianza, y **cada cifra que escribe se valida contra la evidencia**: si aparece un número que no está en los datos, la explicación se descarta y se usa la plantilla.
 - **Sin llave, o si Claude falla o tarda más de 30 s**, se usa una **plantilla** que arma la explicación con las mismas cifras. La pantalla indica quién la redactó.
-- Cada caso tiene una **huella** (medidor, tipo y momento en que empezó). Si un análisis nuevo encuentra el mismo caso, se reutiliza el texto ya escrito y no se vuelve a llamar a Claude. Así se controla el costo.
+- Cada caso tiene una **huella** (medidor, tipo y momento en que empezó). Si un análisis nuevo encuentra el mismo caso con la misma evidencia, se reutiliza el texto ya escrito y no se vuelve a llamar a Claude; si la evidencia cambia, se redacta de nuevo. Así se controla el costo.
 
 ## 6. Arquitectura
 
@@ -226,7 +227,7 @@ El backend está dividido en cuatro capas:
 
 El motor vive en `Domain` sin dependencias. Por eso se prueba sin base de datos y, si hiciera falta llevarlo a Go (el lenguaje sugerido por el reto), bastaría con traducirlo sin rediseñar nada.
 
-**El análisis corre en segundo plano.** `POST /api/ai/analyze` responde `202 Accepted` de inmediato con el id de la corrida. Un trabajador la ejecuta y el front consulta el avance cada 250 ms. Si se pide un análisis mientras hay otro en curso, se devuelve el que ya está corriendo.
+**El análisis corre en segundo plano.** `POST /api/ai/analyze` responde `202 Accepted` de inmediato con el id de la corrida. Un trabajador la ejecuta y el front consulta el avance: cada 250 ms durante los primeros segundos, para que las etapas rápidas se vean fluidas, y luego cada segundo mientras Claude redacta. Si se pide un análisis mientras hay otro en curso, se devuelve el que ya está corriendo.
 
 **Persistencia.** Todo queda en PostgreSQL: medidores, lecturas, eventos, anomalías, el historial de cambios de estado (con la nota y el correo de quien lo hizo) y las corridas de análisis. Al arrancar, la API aplica las migraciones y carga los CSV si la base de datos está vacía.
 
