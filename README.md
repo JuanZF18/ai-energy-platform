@@ -241,7 +241,7 @@ El motor vive en `Domain` sin dependencias. Por eso se prueba sin base de datos 
 | Frontend | React + Vite + TypeScript, TanStack Query, Tailwind CSS, Recharts | Ecosistema moderno; Vite compila rápido. Detrás de un login, el renderizado en servidor de Next.js no aporta. Los componentes se construyeron con Tailwind, sin librería de componentes. |
 | Datos | PostgreSQL + EF Core | Relacional, con migraciones versionadas. En producción, Neon (PostgreSQL administrado). |
 | IA | Motor estadístico + Claude | Las decisiones son verificables y repetibles; el lenguaje natural lo aporta el modelo, con plantillas de respaldo. |
-| Despliegue | Fly.io (API) + Firebase Hosting (front) | Planes gratuitos, HTTPS incluido y despliegue con un comando. |
+| Despliegue | Fly.io (API) + Firebase Hosting (front) | Costo bajo (Firebase Hosting es gratuito y Fly.io cobra por uso), HTTPS incluido y despliegue con un comando. |
 | Análisis | En segundo plano, con avance consultable | El análisis no bloquea la petición y la interfaz puede mostrar cada etapa. |
 | Autenticación | Firebase Authentication, con un modo Demo de respaldo | Inicio de sesión real sin construir un sistema de usuarios; el modo Demo permite correrlo sin depender de Firebase. |
 
@@ -430,7 +430,7 @@ ai-energy-platform/
 │       ├── components/                     Piezas visuales reutilizables (botones, tarjetas, badges)
 │       ├── features/                       Una carpeta por pantalla: dashboard, meters, anomalies, analysis, auth
 │       └── lib/                            Cliente de la API, tipos, formatos y textos
-├── data/                                   readings.csv, events.csv y meters.csv del reto
+├── data/                                   readings.csv y events.csv del reto, y meters.csv con nombres ilustrativos
 ├── docs/img/                               Capturas usadas en este README
 ├── .github/workflows/ci.yml                Integración continua
 ├── Dockerfile                              Imagen de la API (Fly.io y Docker Compose)
